@@ -1,44 +1,61 @@
-const API_BASE = "http://localhost:5000/api";
-async function fetchRiskAssessment(payload) {
-  const res = await fetch(API_BASE + "/risk/assess", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Risk assessment failed");
-  return data;
+﻿var API_BASE = "http://localhost:5000/api";
+
+async function fetchRiskAssessment(data) {
+  var res = await fetch(API_BASE + "/risk", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error("Risk API failed: " + res.status);
+  return await res.json();
 }
-async function fetchNutritionData(query, source) {
-  const res = await fetch(API_BASE + "/nutrition?query=" + encodeURIComponent(query||"oats cooked") + "&source=" + (source||"fooddata"));
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Nutrition fetch failed");
-  return data;
+
+async function fetchNutrition(food) {
+  var res = await fetch(API_BASE + "/nutrition?food=" + encodeURIComponent(food));
+  if (!res.ok) throw new Error("Nutrition API failed");
+  return await res.json();
 }
-async function fetchDrugData(medName) {
-  const res = await fetch(API_BASE + "/drug?name=" + encodeURIComponent(medName));
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Drug fetch failed");
-  return data;
+
+async function fetchDrugData(medicine) {
+  var res = await fetch(API_BASE + "/drug?medicine=" + encodeURIComponent(medicine));
+  if (!res.ok) throw new Error("Drug API failed");
+  return await res.json();
 }
-async function parseSymptoms(text, age, sex) {
-  const res = await fetch(API_BASE + "/symptom/parse", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({text,age,sex}) });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Symptom parse failed");
-  return data;
+
+async function parseSymptoms(text, age, gender) {
+  var res = await fetch(API_BASE + "/symptom/parse", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text: text, age: age, gender: gender })
+  });
+  if (!res.ok) throw new Error("Symptom parse failed");
+  return await res.json();
 }
-async function checkSymptoms(symptoms, age, sex, rawText) {
-  const res = await fetch(API_BASE + "/symptom/check", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({symptoms,age,sex,rawText}) });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Symptom check failed");
-  return data;
+
+async function checkSymptoms(mentions, age, gender, text) {
+  var res = await fetch(API_BASE + "/symptom/check", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ mentions: mentions, age: age, gender: gender, text: text })
+  });
+  if (!res.ok) throw new Error("Symptom check failed");
+  return await res.json();
 }
-async function findProviders(city, specialty) {
-  const res = await fetch(API_BASE + "/provider?city=" + encodeURIComponent(city||"") + "&specialty=" + encodeURIComponent(specialty||"general"));
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Provider search failed");
-  return data;
+
+async function fetchProviders(city, specialty) {
+  var res = await fetch(API_BASE + "/provider?city=" + encodeURIComponent(city) + "&specialty=" + encodeURIComponent(specialty));
+  if (!res.ok) throw new Error("Provider API failed");
+  return await res.json();
 }
-async function fetchDiseaseStats(country) {
-  const url = country ? API_BASE + "/disease/country/" + encodeURIComponent(country) : API_BASE + "/disease/global";
-  const res = await fetch(url);
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Disease stats failed");
-  return data;
+
+async function fetchDiseaseStats(disease) {
+  var res = await fetch(API_BASE + "/disease?name=" + encodeURIComponent(disease || "covid"));
+  if (!res.ok) throw new Error("Disease API failed");
+  return await res.json();
+}
+
+async function fetchInsurance(age, conditions) {
+  var res = await fetch(API_BASE + "/insurance?age=" + age + "&conditions=" + encodeURIComponent(conditions || ""));
+  if (!res.ok) throw new Error("Insurance API failed");
+  return await res.json();
 }

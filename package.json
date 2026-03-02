@@ -1,0 +1,12 @@
+﻿{
+  "name": "healthguard-india",
+  "version": "1.0.0",
+  "description": "HealthGuard India - Free Health Risk Platform for India",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

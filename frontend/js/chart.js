@@ -1,17 +1,56 @@
-var riskChartInstance = null;
-function renderRadarChart(factors, riskLevel) {
-  if (riskChartInstance) { riskChartInstance.destroy(); riskChartInstance = null; }
-  var colorMap = { Low:"#00d4aa", Moderate:"#ffa500", High:"#ff4466" };
-  var color = colorMap[riskLevel] || "#ff6b00";
-  var labels = factors.map(function(f) { var l = f.factor.split("(")[0].trim(); return l.length > 16 ? l.slice(0,16)+"..." : l; });
-  var dataPoints = factors.map(function(f) { return f.points || 0; });
-  var ctx = document.getElementById("riskChart").getContext("2d");
-  riskChartInstance = new Chart(ctx, {
+﻿function renderRadarChart(factors, riskLevel) {
+  var canvas = document.getElementById("riskChart");
+  if (!canvas) return;
+
+  // Destroy existing chart if any
+  if (window._radarChart) {
+    window._radarChart.destroy();
+    window._radarChart = null;
+  }
+
+  var labels = factors.map(function(f) { return f.factor; });
+  var values = factors.map(function(f) { return f.isRisk ? 80 + Math.random() * 20 : 10 + Math.random() * 30; });
+
+  var colors = { Low: "#00d4aa", Moderate: "#ffa500", High: "#ff4466" };
+  var color = colors[riskLevel] || "#ff6b00";
+
+  var isDark = !document.body.classList.contains("light-mode");
+  var gridColor  = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+  var labelColor = isDark ? "rgba(255,255,255,0.6)"  : "rgba(0,0,0,0.6)";
+
+  window._radarChart = new Chart(canvas, {
     type: "radar",
-    data: { labels:labels, datasets:[{ label:"Risk Profile", data:dataPoints, borderColor:color, backgroundColor:color+"18", pointBackgroundColor:color, pointBorderColor:color, pointHoverBackgroundColor:"#fff", borderWidth:2, pointRadius:4, pointHoverRadius:6 }] },
-    options: { responsive:true, maintainAspectRatio:false,
-      scales:{ r:{ min:0, max:4, grid:{color:"rgba(255,255,255,0.04)"}, angleLines:{color:"rgba(255,255,255,0.04)"}, ticks:{color:"rgba(255,255,255,0.2)",backdropColor:"transparent",stepSize:1}, pointLabels:{color:"#a0a0c0",font:{family:"Poppins",size:10}} } },
-      plugins:{ legend:{display:false}, tooltip:{ backgroundColor:"#1a1a35", borderColor:"rgba(255,107,0,0.2)", borderWidth:1, titleColor:"#f0f0f0", bodyColor:"#a0a0c0", callbacks:{label:function(ctx){return " Risk Points: "+ctx.raw;}} } }
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Risk Factors",
+        data: values,
+        backgroundColor: color + "22",
+        borderColor: color,
+        borderWidth: 2,
+        pointBackgroundColor: color,
+        pointBorderColor: color,
+        pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        r: {
+          min: 0, max: 100,
+          ticks: { display: false },
+          grid: { color: gridColor },
+          angleLines: { color: gridColor },
+          pointLabels: {
+            color: labelColor,
+            font: { size: 11, family: "Poppins, sans-serif" }
+          }
+        }
+      }
     }
   });
 }
