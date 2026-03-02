@@ -1,4 +1,4 @@
-var API_BASE = "https://healthguard-india.onrender.com/api";
+﻿var API_BASE = "https://healthguard-india.onrender.com/api";
 
 async function fetchRiskAssessment(data) {
   var res = await fetch(API_BASE + "/risk", {
