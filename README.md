@@ -1,4 +1,4 @@
-
+(IF CHECKING IN MOBILE PHONE ,PLEASE DO VIEW AS DESKTOP VIEW)
 # HealthGuard India 🏥
 
 > **Free preventive health platform built for 1.4 billion Indians**  
@@ -126,7 +126,7 @@
 
 ## 🚀 Live Demo
 
-🌐 **Website:** [https://healthguard-india.netlify.app](https://healthguard-india.netlify.app)  (IF CHECKING IN MOBILE PHONE ,PLEASE DO VIEW AS DESKTOP VIEW)
+🌐 **Website:** [https://healthguard-india.netlify.app](https://healthguard-india.netlify.app)  
 ⚡ **API Health:** [https://healthguard-india.onrender.com/api/health](https://healthguard-india.onrender.com/api/health)
 
 > **Note:** Backend is on Render free tier — first request may take 30–50 seconds to wake up (cold start). Subsequent requests are fast.
