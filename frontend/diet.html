@@ -1,0 +1,673 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Diet Plan - HealthGuard India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<style>
+.condition-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.ctab{padding:9px 18px;border-radius:10px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:var(--font);font-size:0.84rem;cursor:pointer;transition:all 0.2s}
+.ctab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border-color:transparent;font-weight:600}
+.day-card{background:var(--card);border:1px solid var(--border2);border-radius:16px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow)}
+.day-header{padding:14px 20px;background:linear-gradient(135deg,rgba(255,107,0,0.08),rgba(255,165,0,0.04));border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.day-title{font-size:0.95rem;font-weight:700;color:var(--text)}
+.day-cal{font-size:0.78rem;color:var(--accent2);font-weight:600}
+.day-body{padding:16px 20px;display:none}
+.day-body.open{display:block}
+.meal-row{display:flex;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border2)}
+.meal-row:last-child{border:none;margin:0;padding:0}
+.meal-time{font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;min-width:70px;padding-top:2px}
+.meal-details{}
+.meal-name{font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.meal-desc{font-size:0.78rem;color:var(--text2);line-height:1.5}
+.meal-tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.meal-tag{font-size:0.68rem;padding:2px 8px;border-radius:6px;font-weight:500}
+.meal-tag.protein{background:rgba(0,212,170,0.1);color:var(--low)}
+.meal-tag.fiber{background:rgba(99,102,241,0.1);color:#a5b4fc}
+.meal-tag.lowgi{background:rgba(255,165,0,0.1);color:var(--mod)}
+.meal-tag.iron{background:rgba(255,68,102,0.1);color:var(--high)}
+.meal-tag.calcium{background:rgba(59,130,246,0.1);color:#93c5fd}
+.tips-strip{background:rgba(255,107,0,0.06);border:1px solid rgba(255,107,0,0.15);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:0.84rem;color:var(--text2);line-height:1.7}
+.tips-strip strong{color:var(--accent)}
+.reminder-bar{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;box-shadow:var(--shadow)}
+.reminder-info{font-size:0.88rem;color:var(--text2)}
+.reminder-info strong{color:var(--text);display:block;margin-bottom:3px}
+.reminder-btns{display:flex;gap:8px}
+.med-card{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:var(--shadow)}
+.med-info strong{font-size:0.9rem;color:var(--text);display:block;margin-bottom:4px}
+.med-info span{font-size:0.78rem;color:var(--text2)}
+.set-reminder-btn{padding:8px 16px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:white;font-family:var(--font);font-size:0.8rem;font-weight:600;cursor:pointer}
+.share-strip{background:linear-gradient(135deg,rgba(37,211,102,0.08),rgba(37,211,102,0.03));border:1px solid rgba(37,211,102,0.2);border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.wa-btn{padding:10px 20px;background:#25D366;border:none;border-radius:10px;color:white;font-family:var(--font);font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.wa-btn:hover{background:#128C7E;transform:translateY(-1px)}
+.copy-btn{padding:10px 16px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;color:var(--text2);font-family:var(--font);font-size:0.84rem;cursor:pointer;transition:all 0.2s}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">HG</div>
+      <span class="nav-logo-text">Health<span>Guard</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="assess.html" class="nav-link">Check Health</a>
+      <a href="upload.html" class="nav-link">Upload Report</a>
+      <a href="diet.html" class="nav-link active">Diet Plan</a>
+      <a href="family.html" class="nav-link">Family</a>
+      <a href="tips.html" class="nav-link">Health Tips</a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+    <div class="nav-controls">
+      <button class="lang-btn" id="langHi" onclick="setLang('hi')">Hindi</button>
+      <button class="lang-btn active" id="langEn" onclick="setLang('en')">English</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+    </div>
+  </div>
+</nav>
+
+<div class="wrapper" style="padding-top:30px;padding-bottom:80px">
+  <div style="margin-bottom:24px">
+    <div class="section-label">Personalized</div>
+    <div class="section-title">7-Day Indian Diet Plan</div>
+    <div class="section-sub">Select your condition and get a customized Indian meal plan</div>
+  </div>
+
+  <!-- CONDITION SELECTOR -->
+  <div class="condition-tabs">
+    <button class="ctab active" onclick="loadPlan('diabetes')">High Blood Sugar</button>
+    <button class="ctab" onclick="loadPlan('bp')">High BP</button>
+    <button class="ctab" onclick="loadPlan('cholesterol')">High Cholesterol</button>
+    <button class="ctab" onclick="loadPlan('b12')">Low B12 / Anaemia</button>
+    <button class="ctab" onclick="loadPlan('vitd')">Low Vitamin D</button>
+    <button class="ctab" onclick="loadPlan('weightloss')">Weight Loss</button>
+    <button class="ctab" onclick="loadPlan('general')">General Health</button>
+  </div>
+
+  <!-- TIPS STRIP -->
+  <div class="tips-strip" id="conditionTip"></div>
+
+  <!-- MEDICINE REMINDER SECTION -->
+  <div style="margin-bottom:16px">
+    <div class="section-label">Reminders</div>
+    <div class="section-title" style="font-size:1.1rem">Medicine Reminders</div>
+  </div>
+  <div id="medicineReminders">
+    <div class="reminder-bar">
+      <div class="reminder-info">
+        <strong>Add your medicines to set reminders</strong>
+        You can add medicine names and times below
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+      <input type="text" id="medName" placeholder="Medicine name (e.g. Metformin)" style="flex:1;padding:11px 14px;border-radius:10px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-family:var(--font);font-size:0.9rem;outline:none;min-width:180px"/>
+      <input type="time" id="medTime" value="08:00" style="padding:11px 14px;border-radius:10px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-family:var(--font);font-size:0.9rem;outline:none"/>
+      <button class="set-reminder-btn" onclick="addMedicine()">Add Reminder</button>
+    </div>
+    <div id="medList"></div>
+  </div>
+
+  <!-- WHATSAPP SHARE -->
+  <div style="margin-bottom:16px;margin-top:10px">
+    <div class="section-label">Share</div>
+    <div class="section-title" style="font-size:1.1rem">Share Your Health Plan</div>
+  </div>
+  <div class="share-strip">
+    <div>
+      <div style="font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:4px">Share on WhatsApp</div>
+      <div style="font-size:0.82rem;color:var(--text2)">Share your diet plan or health score with family</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="wa-btn" onclick="shareWhatsApp()">Share on WhatsApp</button>
+      <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+    </div>
+  </div>
+
+  <!-- DIET PLAN DAYS -->
+  <div style="margin-bottom:16px">
+    <div class="section-label">Your Plan</div>
+    <div class="section-title" style="font-size:1.1rem" id="planTitle">7-Day Plan for High Blood Sugar</div>
+  </div>
+  <div id="dietDays"></div>
+</div>
+
+<footer>
+  <div class="wrapper">
+    <div class="footer-brand">HealthGuard India</div>
+    Powered by USDA FoodData &middot; openFDA &middot; Open Disease API<br/>
+    <strong>Made by Sagar</strong> &middot; Not a medical device
+  </div>
+</footer>
+
+<script src="js/lang.js"></script>
+<script src="js/theme.js"></script>
+<script>
+
+// ── DIET PLANS ─────────────────────────────────────────────────────
+var PLANS = {
+  diabetes: {
+    title: "7-Day Plan for High Blood Sugar",
+    tip: "<strong>Key Rules:</strong> Eat small meals every 2-3 hours. Avoid white rice, maida, sugar. Choose brown rice, jowar roti, daliya. Bitter gourd (karela) and methi reduce blood sugar naturally. Walk 30 minutes daily.",
+    days: [
+      { day:"Day 1 - Monday", cal:"1600 kcal", meals:[
+        {time:"7:00 AM", name:"Methi Paratha + Curd", desc:"2 methi parathas with 1 cup low-fat curd. Methi seeds lower blood sugar.", tags:["fiber","lowgi"]},
+        {time:"10:00 AM", name:"Handful of Almonds + 1 Guava", desc:"5-6 almonds and 1 small guava. Low glycemic index snack.", tags:["protein","fiber"]},
+        {time:"1:00 PM", name:"Brown Rice + Dal + Sabzi", desc:"1 katori brown rice, 1 katori moong dal, 1 katori bhindi or karela sabzi, salad.", tags:["fiber","lowgi","protein"]},
+        {time:"4:00 PM", name:"Green Tea + Roasted Chana", desc:"1 cup green tea (no sugar), 30g roasted chana.", tags:["protein","fiber"]},
+        {time:"7:30 PM", name:"Jowar Roti + Dal + Salad", desc:"2 jowar rotis, 1 katori chana dal, cucumber-tomato salad with lemon.", tags:["fiber","lowgi","protein"]}
+      ]},
+      { day:"Day 2 - Tuesday", cal:"1550 kcal", meals:[
+        {time:"7:00 AM", name:"Daliya Upma", desc:"1 bowl broken wheat upma with vegetables. Very low glycemic index.", tags:["fiber","lowgi"]},
+        {time:"10:00 AM", name:"1 Apple + Walnuts", desc:"1 medium apple with 4 walnut halves.", tags:["fiber","protein"]},
+        {time:"1:00 PM", name:"Roti + Rajma + Salad", desc:"2 wheat rotis, 1 katori rajma curry, cucumber salad.", tags:["protein","fiber","lowgi"]},
+        {time:"4:00 PM", name:"Buttermilk (Chaas)", desc:"1 glass plain chaas with jeera and mint. No sugar.", tags:["calcium","lowgi"]},
+        {time:"7:30 PM", name:"Moong Dal Khichdi + Karela Sabzi", desc:"Light khichdi with karela (bitter gourd) sabzi.", tags:["protein","fiber","lowgi"]}
+      ]},
+      { day:"Day 3 - Wednesday", cal:"1600 kcal", meals:[
+        {time:"7:00 AM", name:"Besan Chilla + Green Chutney", desc:"2 besan chillas with coriander chutney. High protein, low carb.", tags:["protein","lowgi"]},
+        {time:"10:00 AM", name:"Sprouts Chat", desc:"1 katori mixed sprouts with lemon and spices.", tags:["protein","fiber"]},
+        {time:"1:00 PM", name:"Brown Rice + Sambar + Sabzi", desc:"1 katori brown rice, sambar, any seasonal vegetable sabzi.", tags:["fiber","lowgi","protein"]},
+        {time:"4:00 PM", name:"Handful of Peanuts", desc:"30g roasted peanuts. Keeps blood sugar stable.", tags:["protein"]},
+        {time:"7:30 PM", name:"Roti + Palak Dal + Salad", desc:"2 rotis, palak moong dal, mixed salad.", tags:["iron","fiber","protein"]}
+      ]},
+      { day:"Day 4 - Thursday", cal:"1550 kcal", meals:[
+        {time:"7:00 AM", name:"Oats with Milk (No Sugar)", desc:"1 bowl oats cooked in low-fat milk, add cinnamon. Cinnamon reduces blood sugar.", tags:["fiber","lowgi","calcium"]},
+        {time:"10:00 AM", name:"1 Pear + 5 Almonds", desc:"Low glycemic fruit with healthy fat.", tags:["fiber","protein"]},
+        {time:"1:00 PM", name:"Bajra Roti + Kadhi + Sabzi", desc:"2 bajra rotis with kadhi and any sabzi.", tags:["fiber","calcium","lowgi"]},
+        {time:"4:00 PM", name:"Green Tea + Roasted Makhana", desc:"1 cup green tea, 1 handful roasted makhana.", tags:["calcium","fiber"]},
+        {time:"7:30 PM", name:"Vegetable Soup + Daliya", desc:"1 bowl mixed vegetable soup, 1 small bowl daliya.", tags:["fiber","lowgi"]}
+      ]},
+      { day:"Day 5 - Friday", cal:"1600 kcal", meals:[
+        {time:"7:00 AM", name:"Idli + Sambar", desc:"2-3 small idlis with sambar. Fermented food, good for gut and blood sugar.", tags:["protein","fiber","lowgi"]},
+        {time:"10:00 AM", name:"Coconut Water", desc:"1 glass natural coconut water. Hydrates and stabilizes sugar.", tags:["lowgi"]},
+        {time:"1:00 PM", name:"Jowar Roti + Chana Dal + Bhindi", desc:"2 jowar rotis, chana dal, bhindi sabzi.", tags:["fiber","protein","lowgi"]},
+        {time:"4:00 PM", name:"Chaas + Roasted Chana", desc:"1 glass buttermilk with 30g chana.", tags:["protein","calcium"]},
+        {time:"7:30 PM", name:"Brown Rice Pulao + Raita", desc:"Small portion vegetable pulao with cucumber raita.", tags:["fiber","lowgi","calcium"]}
+      ]},
+      { day:"Day 6 - Saturday", cal:"1500 kcal", meals:[
+        {time:"7:00 AM", name:"Methi Thepla + Dahi", desc:"2 methi theplas with low-fat curd.", tags:["fiber","lowgi","calcium"]},
+        {time:"10:00 AM", name:"Jamun (Black Plum)", desc:"10-12 jamuns. Jamun is excellent for blood sugar control.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Roti + Mixed Dal + Salad", desc:"2 rotis, mixed dal (moong + masoor), large salad.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Herbal Tea + Makhana", desc:"1 cup tulsi or ginger tea, makhana.", tags:["calcium","fiber"]},
+        {time:"7:30 PM", name:"Vegetable Khichdi + Chaas", desc:"Light moong dal khichdi with buttermilk.", tags:["protein","fiber","lowgi"]}
+      ]},
+      { day:"Day 7 - Sunday", cal:"1600 kcal", meals:[
+        {time:"7:00 AM", name:"Poha with Sprouts", desc:"1 bowl poha with added sprouted moong, less oil.", tags:["fiber","protein","lowgi"]},
+        {time:"10:00 AM", name:"1 Orange + Almonds", desc:"Vitamin C rich fruit with nuts.", tags:["fiber","protein"]},
+        {time:"1:00 PM", name:"Brown Rice + Sambhar + Sabzi", desc:"Controlled portion brown rice, sambhar, sabzi.", tags:["fiber","lowgi","protein"]},
+        {time:"4:00 PM", name:"Coconut Water", desc:"Natural electrolytes, zero sugar.", tags:["lowgi"]},
+        {time:"7:30 PM", name:"Roti + Dal Makhani (Low Fat) + Salad", desc:"2 rotis, light dal makhani, salad.", tags:["protein","fiber"]}
+      ]}
+    ]
+  },
+  bp: {
+    title: "7-Day Plan for High Blood Pressure",
+    tip: "<strong>Key Rules:</strong> Reduce salt drastically. Avoid pickles, papad, processed food. Eat banana, coconut water, curd daily — these are rich in potassium which lowers BP. Avoid caffeine. Walk daily.",
+    days: [
+      {day:"Day 1", cal:"1700 kcal", meals:[
+        {time:"7:00 AM", name:"Banana + Oats (No Salt)", desc:"1 banana, 1 bowl oats with milk. Banana is rich in potassium.", tags:["fiber","calcium","lowgi"]},
+        {time:"10:00 AM", name:"Coconut Water", desc:"Natural potassium, lowers BP.", tags:["lowgi"]},
+        {time:"1:00 PM", name:"Roti + Dal + Low Salt Sabzi", desc:"2 rotis, dal, vegetable sabzi with minimal salt.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Watermelon / Muskmelon", desc:"High water content, natural diuretic.", tags:["fiber","lowgi"]},
+        {time:"7:30 PM", name:"Brown Rice + Palak Soup + Sabzi", desc:"Small portion rice, palak soup, sabzi with very low salt.", tags:["iron","fiber","lowgi"]}
+      ]},
+      {day:"Day 2", cal:"1650 kcal", meals:[
+        {time:"7:00 AM", name:"Dahi + Flaxseeds + Fruit", desc:"1 cup curd, 1 tsp flaxseeds, 1 fruit. Flaxseeds reduce BP.", tags:["calcium","protein","fiber"]},
+        {time:"10:00 AM", name:"Amla Juice", desc:"2-3 amlas or juice. Amla significantly lowers BP.", tags:["fiber"]},
+        {time:"1:00 PM", name:"Jowar Roti + Kidney Beans + Salad", desc:"2 rotis, rajma (low salt), large salad.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Handful of Pumpkin Seeds", desc:"Rich in magnesium, great for heart and BP.", tags:["protein"]},
+        {time:"7:30 PM", name:"Moong Dal Soup + 1 Roti", desc:"Light soup dinner.", tags:["protein","fiber","lowgi"]}
+      ]},
+      {day:"Day 3", cal:"1700 kcal", meals:[
+        {time:"7:00 AM", name:"Poha + 1 Banana", desc:"Low sodium poha with a banana.", tags:["fiber","lowgi"]},
+        {time:"10:00 AM", name:"Coconut Water", desc:"Best natural drink for BP.", tags:["lowgi"]},
+        {time:"1:00 PM", name:"Brown Rice + Sambar + Curd", desc:"Controlled portion, low salt sambar, plain curd.", tags:["calcium","fiber","protein"]},
+        {time:"4:00 PM", name:"1 Apple + Walnuts", desc:"Heart healthy snack.", tags:["fiber","protein"]},
+        {time:"7:30 PM", name:"Vegetable Soup + Roti", desc:"Clear vegetable soup (no salt), 1-2 rotis.", tags:["fiber","lowgi"]}
+      ]},
+      {day:"Day 4", cal:"1600 kcal", meals:[
+        {time:"7:00 AM", name:"Besan Chilla + Mint Chutney", desc:"High protein, low sodium breakfast.", tags:["protein","lowgi"]},
+        {time:"10:00 AM", name:"Watermelon Juice", desc:"Natural diuretic, reduces water retention.", tags:["lowgi"]},
+        {time:"1:00 PM", name:"Roti + Spinach Dal + Salad", desc:"Iron and potassium rich meal.", tags:["iron","protein","fiber"]},
+        {time:"4:00 PM", name:"Buttermilk (No Salt)", desc:"Probiotic, heart healthy.", tags:["calcium"]},
+        {time:"7:30 PM", name:"Daliya Khichdi + Curd", desc:"Easy digest dinner.", tags:["fiber","calcium","lowgi"]}
+      ]},
+      {day:"Day 5", cal:"1700 kcal", meals:[
+        {time:"7:00 AM", name:"Banana Smoothie (No Sugar)", desc:"Banana + low fat milk blended. No added sugar.", tags:["calcium","fiber"]},
+        {time:"10:00 AM", name:"Papaya", desc:"Rich in potassium and fiber.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Bajra Roti + Dal + Cucumber Salad", desc:"Low sodium meal.", tags:["fiber","protein"]},
+        {time:"4:00 PM", name:"Flaxseed Water", desc:"1 tsp flaxseeds soaked overnight, drink the water.", tags:["fiber"]},
+        {time:"7:30 PM", name:"Clear Soup + 2 Rotis + Sabzi", desc:"Light dinner with no salt.", tags:["fiber","lowgi"]}
+      ]},
+      {day:"Day 6", cal:"1650 kcal", meals:[
+        {time:"7:00 AM", name:"Idli + Sambar (Low Salt)", desc:"Fermented, gut friendly, low sodium.", tags:["protein","fiber","lowgi"]},
+        {time:"10:00 AM", name:"Coconut Water + Amla", desc:"Best BP combination.", tags:["lowgi"]},
+        {time:"1:00 PM", name:"Brown Rice + Rajma (Low Salt)", desc:"Potassium rich meal.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Pumpkin Seeds + Tulsi Tea", desc:"Magnesium rich snack with herbal tea.", tags:["protein"]},
+        {time:"7:30 PM", name:"Moong Dal + Roti + Curd", desc:"Light easy protein dinner.", tags:["protein","calcium"]}
+      ]},
+      {day:"Day 7", cal:"1700 kcal", meals:[
+        {time:"7:00 AM", name:"Methi Paratha (Low Oil) + Curd", desc:"1 paratha with curd. Methi lowers BP.", tags:["fiber","calcium","lowgi"]},
+        {time:"10:00 AM", name:"Fresh Orange Juice", desc:"Vitamin C, antioxidants.", tags:["fiber"]},
+        {time:"1:00 PM", name:"Khichdi + Papad Alternative (Roasted)", desc:"Moong khichdi, no regular papad.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Banana + Milk", desc:"Potassium and calcium combo.", tags:["calcium","fiber"]},
+        {time:"7:30 PM", name:"Vegetable Soup + Brown Rice + Sabzi", desc:"Light satisfying dinner.", tags:["fiber","lowgi"]}
+      ]}
+    ]
+  },
+  b12: {
+    title: "7-Day Plan for Low B12 and Anaemia",
+    tip: "<strong>Key Rules:</strong> B12 is mainly in animal products. If vegetarian, eat lots of curd, paneer, fortified milk, eggs. Take Methylcobalamin supplement as advised by doctor. Iron-rich foods help anaemia. Avoid tea/coffee within 1 hour of meals.",
+    days: [
+      {day:"Day 1", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Eggs (2) + Whole Wheat Toast", desc:"2 boiled eggs, 2 toast. Eggs are excellent B12 source.", tags:["protein","iron"]},
+        {time:"10:00 AM", name:"Curd with Honey", desc:"1 cup curd. Rich in B12, probiotics.", tags:["calcium","protein"]},
+        {time:"1:00 PM", name:"Chicken / Paneer + Roti + Salad", desc:"100g grilled chicken or 100g paneer, 2 rotis, salad with lemon.", tags:["protein","iron","calcium"]},
+        {time:"4:00 PM", name:"Fortified Milk + Banana", desc:"1 glass fortified milk, 1 banana.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Dal + Rice + Sabzi + Curd", desc:"Mixed dal, rice, sabzi, 1 cup curd.", tags:["protein","iron","calcium"]}
+      ]},
+      {day:"Day 2", cal:"1850 kcal", meals:[
+        {time:"7:00 AM", name:"Paneer Paratha + Dahi", desc:"2 paneer parathas, curd. Paneer is richest vegetarian B12 source.", tags:["calcium","protein"]},
+        {time:"10:00 AM", name:"Handful of Peanuts", desc:"Good source of protein and some B vitamins.", tags:["protein"]},
+        {time:"1:00 PM", name:"Mutton / Rajma + Roti", desc:"Mutton curry (best B12 source) or rajma for vegetarians.", tags:["protein","iron"]},
+        {time:"4:00 PM", name:"Lassi (Sweet)", desc:"1 glass thick lassi.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Egg Bhurji / Tofu Bhurji + Roti", desc:"Egg bhurji or tofu bhurji, 2 rotis, salad.", tags:["protein","iron"]}
+      ]},
+      {day:"Day 3", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Poha with Sprouts + Milk", desc:"Poha, sprouted moong, 1 glass milk.", tags:["protein","calcium","iron"]},
+        {time:"10:00 AM", name:"1 Apple + Curd", desc:"Iron absorption is helped by Vitamin C.", tags:["calcium","fiber"]},
+        {time:"1:00 PM", name:"Fish Curry / Dal + Roti", desc:"Fish is excellent B12 source. Vegetarians: mixed dal.", tags:["protein","iron"]},
+        {time:"4:00 PM", name:"Paneer Cubes + Tea (After 30 min)", desc:"50g raw or lightly cooked paneer.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Palak Paneer + 2 Rotis", desc:"Iron from palak, B12 from paneer. Power dinner.", tags:["iron","calcium","protein"]}
+      ]},
+      {day:"Day 4", cal:"1850 kcal", meals:[
+        {time:"7:00 AM", name:"Idli + Sambar + Curd", desc:"Fermented idli, protein sambar, curd for B12.", tags:["protein","calcium","fiber"]},
+        {time:"10:00 AM", name:"Boiled Egg / Cottage Cheese", desc:"B12 rich morning snack.", tags:["protein","calcium"]},
+        {time:"1:00 PM", name:"Chicken Soup / Moong Dal + Roti", desc:"Chicken soup is a B12 powerhouse. Vegetarians: moong dal.", tags:["protein","iron"]},
+        {time:"4:00 PM", name:"Fortified Cereal with Milk", desc:"Fortified cereals have added B12.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Egg Curry / Paneer Curry + Rice", desc:"B12 focused dinner.", tags:["protein","calcium","iron"]}
+      ]},
+      {day:"Day 5", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Oats with Milk + 2 Eggs", desc:"Oats cooked in milk, 2 boiled eggs on side.", tags:["protein","calcium","fiber"]},
+        {time:"10:00 AM", name:"Dahi Smoothie", desc:"Blend curd with banana. Rich in B12 and calcium.", tags:["calcium","protein"]},
+        {time:"1:00 PM", name:"Tuna / Sardine Sandwich OR Paneer Wrap", desc:"Tuna is highest in B12. Vegetarians: paneer wrap with veggies.", tags:["protein","iron","calcium"]},
+        {time:"4:00 PM", name:"Lassi / Buttermilk", desc:"Dairy is key for B12.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Dal Palak + Curd + Rice", desc:"Iron and B12 combo dinner.", tags:["iron","protein","calcium"]}
+      ]},
+      {day:"Day 6", cal:"1850 kcal", meals:[
+        {time:"7:00 AM", name:"Paneer Bhurji + 2 Rotis", desc:"Scrambled paneer, high B12 breakfast.", tags:["protein","calcium"]},
+        {time:"10:00 AM", name:"Boiled Chickpeas with Lemon", desc:"Iron rich snack with Vitamin C for absorption.", tags:["protein","iron"]},
+        {time:"1:00 PM", name:"Mutton / Chicken / Dal + Rice", desc:"Best animal B12 sources or dal for vegetarians.", tags:["protein","iron"]},
+        {time:"4:00 PM", name:"Milk + Banana", desc:"Simple B12 and potassium snack.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Egg Salad / Chole + Roti", desc:"High protein easy dinner.", tags:["protein","iron"]}
+      ]},
+      {day:"Day 7", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Dahi Paratha + Fresh Curd", desc:"Curd stuffed paratha, extra curd on side.", tags:["calcium","protein"]},
+        {time:"10:00 AM", name:"Mixed Nuts + Fortified Milk", desc:"Nuts and B12 fortified milk.", tags:["protein","calcium"]},
+        {time:"1:00 PM", name:"Palak Paneer + Roti + Dal", desc:"Iron + B12 powerhouse meal.", tags:["iron","protein","calcium"]},
+        {time:"4:00 PM", name:"Boiled Egg / Paneer Snack", desc:"Quick B12 top-up.", tags:["protein","calcium"]},
+        {time:"7:30 PM", name:"Fish / Paneer + Brown Rice + Salad", desc:"Balanced dinner to end the week.", tags:["protein","iron","calcium"]}
+      ]}
+    ]
+  },
+  vitd: {
+    title: "7-Day Plan for Low Vitamin D",
+    tip: "<strong>Key Rules:</strong> Sit in morning sunlight (7-9 AM) for 20-30 minutes daily — this is the best source. Eat fatty fish, eggs, fortified milk. Vitamin D needs fat to absorb so eat healthy fats. Your level is 24.9 (Insufficient — target 30+).",
+    days: [
+      {day:"Day 1", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"20 min Sunlight + Fortified Milk + Eggs", desc:"Sit in sunlight while having breakfast. 2 eggs + 1 glass fortified milk.", tags:["calcium","protein"]},
+        {time:"10:00 AM", name:"Almonds + 1 Banana", desc:"Almonds have Vitamin D. Banana for energy.", tags:["protein","fiber"]},
+        {time:"1:00 PM", name:"Salmon / Tuna / Sardine Curry + Rice", desc:"Fatty fish are the best food source of Vitamin D.", tags:["protein","iron"]},
+        {time:"4:00 PM", name:"Curd with Flaxseeds", desc:"Curd + omega-3 for Vitamin D metabolism.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Egg Curry / Paneer + 2 Rotis", desc:"Keep up Vitamin D foods at dinner.", tags:["protein","calcium"]}
+      ]},
+      {day:"Day 2", cal:"1750 kcal", meals:[
+        {time:"7:00 AM", name:"Mushroom Omelette + Milk", desc:"Mushrooms exposed to sunlight are rich in Vitamin D. 2 egg omelette.", tags:["protein","calcium"]},
+        {time:"10:00 AM", name:"Orange Juice", desc:"Vitamin C helps Vitamin D work better.", tags:["fiber"]},
+        {time:"1:00 PM", name:"Fish / Soya + Brown Rice + Salad", desc:"High Vitamin D meal.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Fortified Cereal + Milk", desc:"Many cereals are fortified with Vitamin D.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Dal + Ghee + Roti", desc:"Ghee helps absorb fat-soluble Vitamin D.", tags:["protein","fiber"]}
+      ]},
+      {day:"Day 3", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Boiled Eggs + Fortified Milk", desc:"2 eggs + milk. Double Vitamin D hit.", tags:["protein","calcium"]},
+        {time:"10:00 AM", name:"Handful of Cashews", desc:"Good fat that helps Vitamin D absorption.", tags:["protein"]},
+        {time:"1:00 PM", name:"Tuna Sandwich / Paneer Wrap", desc:"Tuna: extremely high Vitamin D. Paneer for vegetarians.", tags:["protein","calcium"]},
+        {time:"4:00 PM", name:"Dahi + Honey", desc:"Vitamin D and probiotic combo.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Palak + Paneer + Roti", desc:"Calcium and protein dinner.", tags:["iron","protein","calcium"]}
+      ]},
+      {day:"Day 4", cal:"1750 kcal", meals:[
+        {time:"7:00 AM", name:"Mushroom Poha + Milk", desc:"Mushrooms are one of few plant Vitamin D sources.", tags:["fiber","calcium"]},
+        {time:"10:00 AM", name:"Fortified Orange Juice", desc:"Vitamin D fortified juice.", tags:["fiber"]},
+        {time:"1:00 PM", name:"Sardine / Mackerel Curry + Rice", desc:"Small oily fish have very high Vitamin D.", tags:["protein","calcium"]},
+        {time:"4:00 PM", name:"Walnut + Curd", desc:"Omega-3 and Vitamin D combo.", tags:["protein","calcium"]},
+        {time:"7:30 PM", name:"Egg Bhurji + 2 Rotis + Sabzi", desc:"Easy Vitamin D dinner.", tags:["protein","fiber"]}
+      ]},
+      {day:"Day 5", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Paneer Paratha + Fortified Milk", desc:"Paneer + milk for maximum dairy Vitamin D.", tags:["calcium","protein"]},
+        {time:"10:00 AM", name:"Sunflower Seeds", desc:"Good source of Vitamin D and healthy fats.", tags:["protein"]},
+        {time:"1:00 PM", name:"Chicken / Dal + Mushroom Sabzi + Roti", desc:"Mushroom sabzi adds Vitamin D to any meal.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Yogurt with Nuts", desc:"Vitamin D + healthy fats.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Fish / Soya Curry + Brown Rice", desc:"End the day with Vitamin D rich dinner.", tags:["protein","fiber"]}
+      ]},
+      {day:"Day 6", cal:"1750 kcal", meals:[
+        {time:"7:00 AM", name:"Scrambled Eggs + Mushrooms + Milk", desc:"Triple Vitamin D breakfast.", tags:["protein","calcium"]},
+        {time:"10:00 AM", name:"Papaya", desc:"Antioxidants support Vitamin D metabolism.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Salmon / Paneer + Roti + Salad", desc:"High Vitamin D lunch.", tags:["protein","calcium"]},
+        {time:"4:00 PM", name:"Fortified Milk + Almonds", desc:"Vitamin D + Calcium combo.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Khichdi + Ghee + Curd", desc:"Ghee is a fat-soluble vitamin carrier.", tags:["protein","calcium"]}
+      ]},
+      {day:"Day 7", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Mushroom Omelette + Whole Wheat Toast + Milk", desc:"Complete Vitamin D breakfast.", tags:["protein","calcium","fiber"]},
+        {time:"10:00 AM", name:"Mixed Dry Fruits", desc:"Almonds, walnuts, cashews.", tags:["protein"]},
+        {time:"1:00 PM", name:"Fish Biryani / Mushroom Biryani", desc:"Special Vitamin D Sunday meal.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Lassi + Roasted Peanuts", desc:"Dairy and protein snack.", tags:["calcium","protein"]},
+        {time:"7:30 PM", name:"Palak Paneer + Brown Rice + Salad", desc:"Balanced end to the week.", tags:["iron","calcium","protein"]}
+      ]}
+    ]
+  },
+  cholesterol: {
+    title: "7-Day Plan for High Cholesterol",
+    tip: "<strong>Key Rules:</strong> Avoid ghee, butter, fried food, red meat. Eat oats, garlic, onion, flaxseeds daily. These actively lower LDL cholesterol. Walk 45 minutes daily. Avoid coconut oil in cooking.",
+    days: [
+      {day:"Day 1", cal:"1600 kcal", meals:[
+        {time:"7:00 AM", name:"Oats with Low Fat Milk + Walnuts", desc:"Oats beta-glucan directly lowers LDL cholesterol.", tags:["fiber","protein","lowgi"]},
+        {time:"10:00 AM", name:"1 Apple", desc:"Pectin in apple reduces cholesterol.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Roti + Dal + Salad with Flaxseeds", desc:"1 tsp flaxseeds on salad. Powerful cholesterol reducer.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Handful of Walnuts", desc:"Omega-3 raises HDL, lowers LDL.", tags:["protein"]},
+        {time:"7:30 PM", name:"Brown Rice + Palak Dal + Garlic Chutney", desc:"Garlic actively lowers cholesterol.", tags:["iron","fiber","protein"]}
+      ]},
+      {day:"Day 2", cal:"1550 kcal", meals:[
+        {time:"7:00 AM", name:"Barley Porridge (Jau)", desc:"Barley is even better than oats for cholesterol.", tags:["fiber","lowgi"]},
+        {time:"10:00 AM", name:"Amla Juice", desc:"Amla significantly lowers total cholesterol.", tags:["fiber"]},
+        {time:"1:00 PM", name:"Rajma + Roti + Salad", desc:"Rajma is excellent for reducing LDL.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Green Tea", desc:"Catechins in green tea lower LDL.", tags:["lowgi"]},
+        {time:"7:30 PM", name:"Vegetable Soup + 2 Rotis", desc:"Light low-fat dinner.", tags:["fiber","lowgi"]}
+      ]},
+      {day:"Day 3", cal:"1600 kcal", meals:[
+        {time:"7:00 AM", name:"Oats Upma + Green Tea", desc:"Savory oats, no butter.", tags:["fiber","lowgi"]},
+        {time:"10:00 AM", name:"Orange", desc:"Flavonoids lower cholesterol.", tags:["fiber"]},
+        {time:"1:00 PM", name:"Fish (Grilled) / Dal + Brown Rice", desc:"Omega-3 from fish. Vegetarians: dal.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Flaxseed Water + Almonds", desc:"Soak 1 tsp flaxseeds overnight, drink water.", tags:["fiber","protein"]},
+        {time:"7:30 PM", name:"Moong Dal + Roti + Garlic Tadka", desc:"Garlic tadka on dal is heart healthy.", tags:["protein","fiber"]}
+      ]},
+      {day:"Day 4", cal:"1550 kcal", meals:[
+        {time:"7:00 AM", name:"Besan Chilla with Onion + Green Tea", desc:"Onion raises HDL (good cholesterol).", tags:["protein","lowgi"]},
+        {time:"10:00 AM", name:"Papaya", desc:"Enzyme papain is good for heart.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Jowar Roti + Chole + Salad", desc:"Chole (chickpeas) lower LDL.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Walnuts + 1 Pear", desc:"Heart healthy snack.", tags:["protein","fiber"]},
+        {time:"7:30 PM", name:"Daliya + Low Fat Curd", desc:"Easy digest cholesterol-friendly dinner.", tags:["fiber","calcium"]}
+      ]},
+      {day:"Day 5", cal:"1600 kcal", meals:[
+        {time:"7:00 AM", name:"Oats + Flaxseeds + Low Fat Milk", desc:"Maximum cholesterol lowering breakfast.", tags:["fiber","calcium","lowgi"]},
+        {time:"10:00 AM", name:"Amla + Ginger Juice", desc:"Powerful combination for heart health.", tags:["fiber"]},
+        {time:"1:00 PM", name:"Salmon / Mackerel / Dal + Rice", desc:"Omega-3 from fish. Most effective LDL reducer.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Green Tea + Roasted Peanuts", desc:"Peanuts raise HDL.", tags:["protein","lowgi"]},
+        {time:"7:30 PM", name:"Roti + Mixed Sabzi + Dal", desc:"Varied vegetable dinner.", tags:["fiber","protein"]}
+      ]},
+      {day:"Day 6", cal:"1550 kcal", meals:[
+        {time:"7:00 AM", name:"Idli + Sambar (No Ghee)", desc:"Low fat fermented food.", tags:["protein","fiber","lowgi"]},
+        {time:"10:00 AM", name:"1 Apple + Walnuts", desc:"Best cholesterol snack combination.", tags:["fiber","protein"]},
+        {time:"1:00 PM", name:"Brown Rice + Sambhar + Sabzi", desc:"Low fat South Indian meal.", tags:["fiber","protein"]},
+        {time:"4:00 PM", name:"Barley Water", desc:"Drink water from cooked barley. Lowers cholesterol.", tags:["fiber","lowgi"]},
+        {time:"7:30 PM", name:"Moong Dal Soup + 1-2 Rotis", desc:"Simple heart healthy dinner.", tags:["protein","fiber"]}
+      ]},
+      {day:"Day 7", cal:"1600 kcal", meals:[
+        {time:"7:00 AM", name:"Oats Porridge + Berries / Pomegranate", desc:"Pomegranate reduces oxidized LDL.", tags:["fiber","lowgi"]},
+        {time:"10:00 AM", name:"Coconut Water", desc:"Natural electrolytes, heart friendly.", tags:["lowgi"]},
+        {time:"1:00 PM", name:"Rajma Chawal (Minimal Oil) + Salad", desc:"Rajma reduces LDL cholesterol.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Green Tea + Almonds", desc:"Heart healthy afternoon.", tags:["protein","lowgi"]},
+        {time:"7:30 PM", name:"Palak Dal + Roti + Garlic Sabzi", desc:"End the week with a cholesterol fighting dinner.", tags:["iron","protein","fiber"]}
+      ]}
+    ]
+  },
+  weightloss: {
+    title: "7-Day Indian Weight Loss Plan",
+    tip: "<strong>Key Rules:</strong> Eat every 3 hours to keep metabolism active. Drink 3 litres water daily. Avoid sugar, maida, fried food completely. Start with a glass of warm lemon water every morning. Walk 45 minutes.",
+    days: [
+      {day:"Day 1", cal:"1400 kcal", meals:[
+        {time:"6:30 AM", name:"Warm Lemon Water", desc:"1 glass warm water with half lemon. Kickstarts metabolism.", tags:["lowgi"]},
+        {time:"8:00 AM", name:"Daliya with Vegetables", desc:"1 bowl broken wheat upma. Low calorie, high fiber.", tags:["fiber","lowgi"]},
+        {time:"11:00 AM", name:"1 Fruit + Green Tea", desc:"1 apple or guava, 1 green tea.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"2 Roti + Dal + Large Salad", desc:"Small portions, large salad with no dressing.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Roasted Chana + Chaas", desc:"Protein snack, probiotic drink.", tags:["protein","calcium"]},
+        {time:"7:00 PM", name:"Vegetable Soup + 1 Roti + Sabzi", desc:"Early light dinner. No rice at night.", tags:["fiber","lowgi"]}
+      ]},
+      {day:"Day 2", cal:"1350 kcal", meals:[
+        {time:"6:30 AM", name:"Warm Lemon Water + Jeera", desc:"Jeera boosts fat burning.", tags:["lowgi"]},
+        {time:"8:00 AM", name:"Oats + Skimmed Milk", desc:"No sugar oats.", tags:["fiber","calcium","lowgi"]},
+        {time:"11:00 AM", name:"Cucumber + Carrot Sticks", desc:"Zero calorie snack.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Brown Rice (Half Katori) + Dal + Salad", desc:"Controlled portions.", tags:["protein","fiber","lowgi"]},
+        {time:"4:00 PM", name:"Green Tea + 5 Almonds", desc:"Antioxidants + healthy fat.", tags:["protein","lowgi"]},
+        {time:"7:00 PM", name:"Moong Dal Soup + 2 Rotis", desc:"Light protein dinner.", tags:["protein","fiber"]}
+      ]},
+      {day:"Day 3", cal:"1400 kcal", meals:[
+        {time:"6:30 AM", name:"Warm Lemon Ginger Water", desc:"Ginger boosts metabolism.", tags:["lowgi"]},
+        {time:"8:00 AM", name:"Besan Chilla (2) + Mint Chutney", desc:"High protein low calorie breakfast.", tags:["protein","lowgi"]},
+        {time:"11:00 AM", name:"1 Guava + Green Tea", desc:"High fiber low calorie snack.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Jowar Roti + Sabzi + Dal + Salad", desc:"Jowar has fewer calories than wheat.", tags:["fiber","protein","lowgi"]},
+        {time:"4:00 PM", name:"Sprouts Chat", desc:"High protein, very low calorie.", tags:["protein","fiber"]},
+        {time:"7:00 PM", name:"Clear Vegetable Soup + 1 Roti", desc:"Minimal calorie dinner.", tags:["fiber","lowgi"]}
+      ]},
+      {day:"Day 4", cal:"1350 kcal", meals:[
+        {time:"6:30 AM", name:"Warm Water + Apple Cider Vinegar", desc:"1 tsp ACV in warm water. Burns fat.", tags:["lowgi"]},
+        {time:"8:00 AM", name:"Poha (Less Oil) + 1 Egg White", desc:"Modified low calorie poha.", tags:["fiber","protein","lowgi"]},
+        {time:"11:00 AM", name:"Buttermilk (Chaas) No Salt", desc:"Fills stomach, very low calorie.", tags:["calcium","lowgi"]},
+        {time:"1:00 PM", name:"2 Roti + Chana + Large Salad", desc:"Chana keeps you full for hours.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"1 Orange + Green Tea", desc:"Vitamin C boosts fat burning.", tags:["fiber","lowgi"]},
+        {time:"7:00 PM", name:"Khichdi (Small Bowl) + Curd", desc:"Easy digest light dinner.", tags:["protein","calcium","fiber"]}
+      ]},
+      {day:"Day 5", cal:"1400 kcal", meals:[
+        {time:"6:30 AM", name:"Warm Lemon Water", desc:"Daily morning ritual.", tags:["lowgi"]},
+        {time:"8:00 AM", name:"Idli (3) + Sambar (No Rice)", desc:"Low calorie South Indian breakfast.", tags:["protein","fiber","lowgi"]},
+        {time:"11:00 AM", name:"Makhana (Roasted) + Green Tea", desc:"Very low calorie, filling snack.", tags:["calcium","lowgi"]},
+        {time:"1:00 PM", name:"Brown Rice (Small) + Dal + Salad", desc:"Controlled carb lunch.", tags:["protein","fiber","lowgi"]},
+        {time:"4:00 PM", name:"Coconut Water", desc:"Natural electrolytes, zero fat.", tags:["lowgi"]},
+        {time:"7:00 PM", name:"Palak Soup + 2 Rotis + Sabzi", desc:"Iron rich light dinner.", tags:["iron","fiber","protein"]}
+      ]},
+      {day:"Day 6", cal:"1350 kcal", meals:[
+        {time:"6:30 AM", name:"Warm Cinnamon Water", desc:"Cinnamon reduces appetite and blood sugar.", tags:["lowgi"]},
+        {time:"8:00 AM", name:"Oats Chilla + Curd", desc:"Savoury oats pancake, low calorie.", tags:["fiber","calcium","lowgi"]},
+        {time:"11:00 AM", name:"Roasted Peanuts (Small Handful)", desc:"Protein keeps you full.", tags:["protein"]},
+        {time:"1:00 PM", name:"Bajra Roti + Dal + Cucumber Salad", desc:"Bajra is very filling.", tags:["fiber","protein"]},
+        {time:"4:00 PM", name:"Green Tea + 5 Almonds", desc:"Afternoon metabolism boost.", tags:["protein","lowgi"]},
+        {time:"7:00 PM", name:"Moong Dal + 1 Roti + Raw Salad", desc:"Lightest possible dinner.", tags:["protein","fiber"]}
+      ]},
+      {day:"Day 7", cal:"1400 kcal", meals:[
+        {time:"6:30 AM", name:"Warm Lemon Water", desc:"Keep the streak going.", tags:["lowgi"]},
+        {time:"8:00 AM", name:"Vegetable Daliya Upma", desc:"Fiber rich, filling, low calorie.", tags:["fiber","lowgi"]},
+        {time:"11:00 AM", name:"1 Apple", desc:"Natural appetite suppressant.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Roti + Rajma + Large Salad", desc:"Rajma gives long lasting fullness.", tags:["protein","fiber"]},
+        {time:"4:00 PM", name:"Chaas + Roasted Makhana", desc:"Light satisfying snack.", tags:["calcium","lowgi"]},
+        {time:"7:00 PM", name:"Clear Soup + 1 Roti + Sabzi", desc:"End the week light. Weigh yourself tomorrow morning!", tags:["fiber","lowgi"]}
+      ]}
+    ]
+  },
+  general: {
+    title: "7-Day General Healthy Indian Diet",
+    tip: "<strong>Key Rules:</strong> Eat a rainbow of vegetables. Drink 2-3 litres of water. Avoid processed food, packaged snacks, cold drinks. Include curd daily for gut health. Exercise at least 30 minutes. Sleep 7-8 hours.",
+    days: [
+      {day:"Day 1", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Methi Paratha + Curd + 1 Fruit", desc:"Balanced Indian breakfast.", tags:["fiber","calcium","protein"]},
+        {time:"10:00 AM", name:"Mixed Nuts + Green Tea", desc:"Healthy fats and antioxidants.", tags:["protein","lowgi"]},
+        {time:"1:00 PM", name:"Dal + Rice + Sabzi + Salad", desc:"Complete Indian thali in right portions.", tags:["protein","fiber","iron"]},
+        {time:"4:00 PM", name:"Sprouts + Chaas", desc:"Protein snack and probiotic.", tags:["protein","calcium"]},
+        {time:"7:30 PM", name:"2 Rotis + Dal + Sabzi + Curd", desc:"Balanced dinner.", tags:["protein","calcium","fiber"]}
+      ]},
+      {day:"Day 2", cal:"1750 kcal", meals:[
+        {time:"7:00 AM", name:"Oats + Milk + Fruits", desc:"Fiber rich breakfast.", tags:["fiber","calcium","lowgi"]},
+        {time:"10:00 AM", name:"1 Seasonal Fruit", desc:"Eat local seasonal fruits.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Roti + Rajma + Salad + Lassi", desc:"Complete protein with dairy.", tags:["protein","calcium","fiber"]},
+        {time:"4:00 PM", name:"Roasted Chana + Tea (Limited)", desc:"Protein snack.", tags:["protein","fiber"]},
+        {time:"7:30 PM", name:"Khichdi + Curd + Papad", desc:"Easy digest Indian classic.", tags:["protein","calcium","fiber"]}
+      ]},
+      {day:"Day 3", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Besan Chilla + Mint Chutney + Milk", desc:"Protein packed breakfast.", tags:["protein","calcium"]},
+        {time:"10:00 AM", name:"Amla or Seasonal Fruit", desc:"Vitamin C boost.", tags:["fiber"]},
+        {time:"1:00 PM", name:"Brown Rice + Sambar + Rasam + Sabzi", desc:"South Indian complete meal.", tags:["fiber","protein","iron"]},
+        {time:"4:00 PM", name:"Curd with Fruit", desc:"Probiotic snack.", tags:["calcium","fiber"]},
+        {time:"7:30 PM", name:"Roti + Dal + Seasonal Sabzi", desc:"Simple balanced dinner.", tags:["protein","fiber"]}
+      ]},
+      {day:"Day 4", cal:"1750 kcal", meals:[
+        {time:"7:00 AM", name:"Poha + 1 Egg / Paneer + Milk", desc:"Traditional breakfast with protein.", tags:["protein","calcium","fiber"]},
+        {time:"10:00 AM", name:"Coconut Water", desc:"Natural electrolytes.", tags:["lowgi"]},
+        {time:"1:00 PM", name:"Roti + Paneer Sabzi + Dal + Salad", desc:"Calcium and protein rich lunch.", tags:["calcium","protein","fiber"]},
+        {time:"4:00 PM", name:"Makhana + Green Tea", desc:"Light healthy snack.", tags:["calcium","lowgi"]},
+        {time:"7:30 PM", name:"Moong Dal + Rice + Curd", desc:"Gut friendly dinner.", tags:["protein","calcium","fiber"]}
+      ]},
+      {day:"Day 5", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Idli + Sambar + Coconut Chutney", desc:"Classic South Indian healthy breakfast.", tags:["protein","fiber","calcium"]},
+        {time:"10:00 AM", name:"Papaya + Lime", desc:"Digestive enzymes and Vitamin C.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Bajra Roti + Dal + Bhindi + Curd", desc:"Calcium and fiber rich meal.", tags:["calcium","fiber","protein"]},
+        {time:"4:00 PM", name:"Roasted Peanuts + Jaggery (Small)", desc:"Iron from peanuts, jaggery is healthy sweetener.", tags:["iron","protein"]},
+        {time:"7:30 PM", name:"Vegetable Pulao + Raita", desc:"Satisfying end to the day.", tags:["fiber","calcium","protein"]}
+      ]},
+      {day:"Day 6", cal:"1750 kcal", meals:[
+        {time:"7:00 AM", name:"Dalia + Milk + Dry Fruits", desc:"Fiber and micronutrient breakfast.", tags:["fiber","calcium","protein"]},
+        {time:"10:00 AM", name:"Seasonal Fruit Chaat", desc:"Mixed fruits with chaat masala and lemon.", tags:["fiber","lowgi"]},
+        {time:"1:00 PM", name:"Chole + Roti + Lassi + Salad", desc:"North Indian classic healthy meal.", tags:["protein","calcium","fiber"]},
+        {time:"4:00 PM", name:"Til (Sesame) Chikki + Tea", desc:"Calcium from sesame, jaggery sweetened.", tags:["calcium","iron"]},
+        {time:"7:30 PM", name:"Dal Palak + Roti + Curd", desc:"Iron and protein dinner.", tags:["iron","protein","calcium"]}
+      ]},
+      {day:"Day 7", cal:"1800 kcal", meals:[
+        {time:"7:00 AM", name:"Aloo Paratha (1) + Curd + Fruit", desc:"Sunday treat with healthy sides.", tags:["calcium","fiber"]},
+        {time:"10:00 AM", name:"Mixed Juice (Carrot Beetroot Amla)", desc:"Detox juice. Beetroot boosts stamina.", tags:["iron","fiber"]},
+        {time:"1:00 PM", name:"Special Dal Makhani + Brown Rice + Salad", desc:"Weekend special with controlled portions.", tags:["protein","calcium","fiber"]},
+        {time:"4:00 PM", name:"Fruit Custard (Low Sugar)", desc:"Low sugar curd custard with fruits.", tags:["calcium","fiber","protein"]},
+        {time:"7:30 PM", name:"Roti + Mix Veg + Dal + Curd", desc:"Classic balanced Indian dinner.", tags:["protein","calcium","fiber"]}
+      ]}
+    ]
+  }
+};
+
+// ── RENDER PLAN ─────────────────────────────────────────────────────
+var currentPlanKey = "diabetes";
+
+function loadPlan(key) {
+  currentPlanKey = key;
+  document.querySelectorAll(".ctab").forEach(function(t){ t.classList.remove("active"); });
+  event.target.classList.add("active");
+  var plan = PLANS[key];
+  document.getElementById("planTitle").textContent = plan.title;
+  document.getElementById("conditionTip").innerHTML = plan.tip;
+  var container = document.getElementById("dietDays");
+  container.innerHTML = "";
+  plan.days.forEach(function(d, i){
+    var dc = document.createElement("div");
+    dc.className = "day-card";
+    var mealsHTML = d.meals.map(function(m){
+      var tagsHTML = m.tags.map(function(tag){
+        return "<span class='meal-tag "+tag+"'>"+tag+"</span>";
+      }).join("");
+      return "<div class='meal-row'><div class='meal-time'>"+m.time+"</div><div class='meal-details'><div class='meal-name'>"+m.name+"</div><div class='meal-desc'>"+m.desc+"</div><div class='meal-tags'>"+tagsHTML+"</div></div></div>";
+    }).join("");
+    dc.innerHTML = "<div class='day-header' onclick='toggleDay(this)'><div class='day-title'>"+d.day+"</div><div class='day-cal'>"+d.cal+" &darr;</div></div><div class='day-body"+(i===0?" open":"")+"'>"+mealsHTML+"</div>";
+    container.appendChild(dc);
+  });
+}
+
+function toggleDay(header){
+  var body = header.nextElementSibling;
+  body.classList.toggle("open");
+  var arrow = header.querySelector(".day-cal");
+  arrow.innerHTML = arrow.innerHTML.includes("&darr;") ? arrow.innerHTML.replace("&darr;","&uarr;") : arrow.innerHTML.replace("&uarr;","&darr;");
+}
+
+// ── MEDICINE REMINDERS ─────────────────────────────────────────────
+var medicines = JSON.parse(localStorage.getItem("hg_medicines") || "[]");
+
+function addMedicine(){
+  var name = document.getElementById("medName").value.trim();
+  var time = document.getElementById("medTime").value;
+  if(!name){ alert("Please enter a medicine name."); return; }
+  medicines.push({ name:name, time:time, id:Date.now() });
+  localStorage.setItem("hg_medicines", JSON.stringify(medicines));
+  document.getElementById("medName").value = "";
+  renderMedicines();
+  scheduleReminder(name, time);
+}
+
+function deleteMedicine(id){
+  medicines = medicines.filter(function(m){ return m.id !== id; });
+  localStorage.setItem("hg_medicines", JSON.stringify(medicines));
+  renderMedicines();
+}
+
+function renderMedicines(){
+  var list = document.getElementById("medList");
+  if(!medicines.length){
+    list.innerHTML = "";
+    return;
+  }
+  list.innerHTML = medicines.map(function(m){
+    return "<div class='med-card'><div class='med-info'><strong>"+m.name+"</strong><span>Reminder set for "+m.time+" daily</span></div><button class='set-reminder-btn' style='background:rgba(255,68,102,0.15);color:#ff4466;' onclick='deleteMedicine("+m.id+")'>Remove</button></div>";
+  }).join("");
+}
+
+function scheduleReminder(name, time){
+  if(!("Notification" in window)){ alert("Reminder added! Your browser does not support notifications but we saved it."); return; }
+  Notification.requestPermission().then(function(permission){
+    if(permission === "granted"){
+      var now = new Date();
+      var parts = time.split(":");
+      var reminderTime = new Date();
+      reminderTime.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+      if(reminderTime <= now) reminderTime.setDate(reminderTime.getDate() + 1);
+      var msUntil = reminderTime - now;
+      setTimeout(function(){
+        new Notification("HealthGuard - Medicine Reminder", {
+          body: "Time to take your " + name + "!",
+          icon: ""
+        });
+      }, msUntil);
+      alert("Reminder set for " + name + " at " + time + "!");
+    } else {
+      alert("Reminder saved! Enable browser notifications for alerts.");
+    }
+  });
+}
+
+// ── WHATSAPP SHARE ─────────────────────────────────────────────────
+function shareWhatsApp(){
+  var score = sessionStorage.getItem("hg_last_score") || "Check yours";
+  var msg = "I checked my health on HealthGuard India! My health risk score: " + score + "%. Check yours too - it is free and made for India! Open HealthGuard: https://healthguardindia.com";
+  var url = "https://wa.me/?text=" + encodeURIComponent(msg);
+  window.open(url, "_blank");
+}
+
+function copyLink(){
+  var text = "Check your health risk for free on HealthGuard India - made for Indian users! https://healthguardindia.com";
+  navigator.clipboard.writeText(text).then(function(){
+    alert("Link copied! Share it with your family.");
+  });
+}
+
+// ── INIT ───────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", function(){
+  loadPlan("diabetes");
+  renderMedicines();
+  // Auto-load plan based on last results
+  var raw = sessionStorage.getItem("hg_results");
+  if(raw){
+    try{
+      var payload = JSON.parse(raw);
+      var result = payload.result;
+      if(result && result.riskPercentage) sessionStorage.setItem("hg_last_score", result.riskPercentage);
+      // Smart plan selection
+      if(result && result.factors){
+        var hasHighSugar = result.factors.some(function(f){ return f.factor.toLowerCase().includes("sugar") && f.isRisk; });
+        var hasHighBP    = result.factors.some(function(f){ return f.factor.toLowerCase().includes("blood pressure") && f.isRisk; });
+        if(hasHighSugar){ loadPlan("diabetes"); document.querySelectorAll(".ctab")[0].classList.add("active"); }
+        else if(hasHighBP){ loadPlan("bp"); document.querySelectorAll(".ctab")[1].classList.add("active"); }
+      }
+    }catch(e){}
+  }
+});
+</script>
+</body>
+</html>

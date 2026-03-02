@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>About - HealthGuard India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<style>
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.score-item{padding:14px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.05)}
+body.light-mode .score-item{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.06)}
+.score-item-label{font-size:0.7rem;color:var(--text3);text-transform:uppercase;margin-bottom:5px;letter-spacing:0.07em}
+.score-item-val{font-size:0.9rem;color:var(--text);font-weight:500}
+.risk-pill{padding:6px 16px;border-radius:20px;font-size:0.78rem;font-weight:600;display:inline-block;margin:4px}
+.risk-pill.low{background:rgba(0,212,170,0.12);color:var(--low);border:1px solid rgba(0,212,170,0.25)}
+.risk-pill.mod{background:rgba(255,165,0,0.12);color:var(--mod);border:1px solid rgba(255,165,0,0.25)}
+.risk-pill.high{background:rgba(255,68,102,0.12);color:var(--high);border:1px solid rgba(255,68,102,0.25)}
+.creator-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:36px 24px;text-align:center;margin-bottom:30px}
+.pages-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.page-link-card{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:16px;text-decoration:none;transition:all 0.2s;display:block}
+.page-link-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.page-link-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:800;color:white;margin-bottom:10px}
+.page-link-title{font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:3px}
+.page-link-desc{font-size:0.74rem;color:var(--text3)}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">HG</div>
+      <span class="nav-logo-text">Health<span>Guard</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-lang="nav_home"></a>
+      <a href="assess.html" class="nav-link" data-lang="nav_check"></a>
+      <a href="upload.html" class="nav-link" data-lang="nav_upload"></a>
+      <a href="diet.html" class="nav-link" data-lang="nav_diet"></a>
+      <a href="family.html" class="nav-link" data-lang="nav_family"></a>
+      <a href="tips.html" class="nav-link" data-lang="nav_tips"></a>
+      <a href="about.html" class="nav-link active" data-lang="nav_about"></a>
+    </div>
+    <div class="nav-controls">
+      <button class="lang-btn" id="langHi" onclick="setLang('hi')">Hindi</button>
+      <button class="lang-btn active" id="langEn" onclick="setLang('en')">English</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+    </div>
+  </div>
+</nav>
+<div class="wrapper" style="padding-top:30px;padding-bottom:80px">
+  <div style="padding:60px 0 40px;text-align:center">
+    <div class="hero-badge">About Us</div>
+    <h1 class="hero-title">HealthGuard <em>India</em></h1>
+    <p class="hero-sub">A free preventive health platform made for people of India.</p>
+  </div>
+  <div class="section-divider"></div>
+
+  <div style="margin:24px 0 16px">
+    <div class="section-label">All Features</div>
+    <div class="section-title">Explore HealthGuard</div>
+  </div>
+  <div class="pages-grid">
+    <a href="assess.html" class="page-link-card">
+      <div class="page-link-icon" style="background:linear-gradient(135deg,#ff6b00,#ffa500)">H</div>
+      <div class="page-link-title">Health Check</div>
+      <div class="page-link-desc">Risk calculator with 7 factors</div>
+    </a>
+    <a href="upload.html" class="page-link-card">
+      <div class="page-link-icon" style="background:linear-gradient(135deg,#f43f5e,#e11d48)">U</div>
+      <div class="page-link-title">Upload Report</div>
+      <div class="page-link-desc">Read blood test and lab reports</div>
+    </a>
+    <a href="diet.html" class="page-link-card">
+      <div class="page-link-icon" style="background:linear-gradient(135deg,#00d4aa,#0ea5e9)">D</div>
+      <div class="page-link-title">Diet Plan</div>
+      <div class="page-link-desc">7-day Indian meal plans</div>
+    </a>
+    <a href="family.html" class="page-link-card">
+      <div class="page-link-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">F</div>
+      <div class="page-link-title">Family Tracker</div>
+      <div class="page-link-desc">Track health of entire family</div>
+    </a>
+    <a href="tips.html" class="page-link-card">
+      <div class="page-link-icon" style="background:linear-gradient(135deg,#a855f7,#ec4899)">T</div>
+      <div class="page-link-title">Health Tips</div>
+      <div class="page-link-desc">Hindi and English tips to share</div>
+    </a>
+    <a href="results.html" class="page-link-card">
+      <div class="page-link-icon" style="background:linear-gradient(135deg,#0ea5e9,#6366f1)">R</div>
+      <div class="page-link-title">Results</div>
+      <div class="page-link-desc">Health score and report card</div>
+    </a>
+  </div>
+
+  <div style="margin:24px 0 16px">
+    <div class="section-label">About</div>
+    <div class="section-title">What Is HealthGuard India?</div>
+  </div>
+  <div class="card">
+    <p style="font-size:0.92rem;color:var(--text2);line-height:1.9">
+      HealthGuard India is a <strong style="color:var(--text)">free preventive health platform</strong> built specifically for Indian users. It combines health risk assessment, blood report reading, personalized Indian diet plans, family health tracking, and health tips in Hindi and English — all in one place.
+      <br/><br/>
+      This tool is <strong style="color:var(--accent)">not a replacement for a doctor</strong>. It is for health awareness so you can have more informed conversations with your healthcare provider.
+    </p>
+  </div>
+
+  <div style="margin:24px 0 16px">
+    <div class="section-label">Scoring</div>
+    <div class="section-title">How Is Risk Calculated?</div>
+  </div>
+  <div class="card">
+    <div class="score-grid">
+      <div class="score-item"><div class="score-item-label">Age</div><div class="score-item-val">Above 45 years = 2 points</div></div>
+      <div class="score-item"><div class="score-item-label">BMI</div><div class="score-item-val">Overweight / Obese = max 3 points</div></div>
+      <div class="score-item"><div class="score-item-label">Blood Pressure</div><div class="score-item-val">High BP = max 3 points</div></div>
+      <div class="score-item"><div class="score-item-label">Blood Sugar</div><div class="score-item-val">High glucose = max 4 points</div></div>
+      <div class="score-item"><div class="score-item-label">Family History</div><div class="score-item-val">Diabetes / BP in family = 2 points</div></div>
+      <div class="score-item"><div class="score-item-label">Activity + Smoking</div><div class="score-item-val">Sedentary / Smoker = max 4 points</div></div>
+    </div>
+    <div style="padding:14px;background:rgba(255,107,0,0.06);border-radius:12px;border:1px solid rgba(255,107,0,0.15);font-size:0.85rem;color:var(--text2);margin-bottom:14px">
+      Total 18 points possible. Converted to percentage for risk score. Health Score = 100 - Risk%.
+    </div>
+    <div>
+      <span class="risk-pill low">0-30% = Low Risk</span>
+      <span class="risk-pill mod">31-60% = Moderate</span>
+      <span class="risk-pill high">61%+ = High Risk</span>
+    </div>
+  </div>
+
+  <div class="disclaimer" style="margin:24px 0">
+    <strong>Medical Disclaimer: </strong>HealthGuard India is NOT a medical device. It does not diagnose any disease. All results are estimates. Always consult a qualified doctor.
+  </div>
+
+  <div class="creator-card">
+    <div style="width:64px;height:64px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;color:white;margin:0 auto 16px">S</div>
+    <div style="font-size:1.4rem;font-weight:800;color:var(--text);margin-bottom:8px">Made by <span style="color:var(--accent)">Sagar</span></div>
+    <div style="font-size:0.88rem;color:var(--text2);max-width:400px;margin:0 auto;line-height:1.7">Built to increase health awareness in India. Using technology to make healthcare more accessible.</div>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button onclick="shareWA()" style="padding:10px 20px;background:#25D366;border:none;border-radius:10px;color:white;font-family:var(--font);font-size:0.84rem;font-weight:600;cursor:pointer">Share HealthGuard</button>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="wrapper">
+    <div class="footer-brand">HealthGuard India</div>
+    <strong>Made by Sagar</strong> &middot; Not a medical device
+  </div>
+</footer>
+<script src="js/lang.js"></script>
+<script src="js/theme.js"></script>
+<script>
+function shareWA(){
+  var msg="HealthGuard India - Free health platform made for India!\n\nFeatures:\n- Health Risk Calculator\n- Blood Report Reading\n- 7-Day Indian Diet Plans\n- Family Health Tracker\n- Health Tips in Hindi\n- Download Health Report Card\n\nAll free: https://healthguardindia.com";
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+</script>
+</body>
+</html>

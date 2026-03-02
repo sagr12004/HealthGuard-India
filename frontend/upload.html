@@ -1,0 +1,378 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Upload Report - HealthGuard India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<style>
+.upload-area{border:2px dashed rgba(255,107,0,0.4);border-radius:16px;padding:40px 24px;text-align:center;cursor:pointer;transition:all 0.2s;background:rgba(255,107,0,0.03)}
+.upload-area:hover,.upload-area.dragover{border-color:var(--accent);background:rgba(255,107,0,0.08)}
+.upload-area-title{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:8px}
+.upload-area-sub{font-size:0.84rem;color:var(--text2);margin-bottom:16px}
+.upload-choose-btn{display:inline-block;padding:10px 22px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;color:white;font-weight:600;font-size:0.9rem;cursor:pointer;border:none;font-family:var(--font)}
+.status-bar{padding:12px 16px;border-radius:10px;font-size:0.85rem;margin-top:12px;display:none;line-height:1.5}
+.status-bar.success{background:rgba(0,212,170,0.08);border:1px solid rgba(0,212,170,0.2);color:var(--low)}
+.status-bar.error{background:rgba(255,68,102,0.08);border:1px solid rgba(255,68,102,0.2);color:var(--high)}
+.status-bar.info{background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);color:#a5b4fc}
+.preview-box{background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:16px;margin-top:14px;display:none}
+.preview-box-title{font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px}
+.preview-img{max-width:100%;border-radius:8px;max-height:260px;object-fit:contain}
+.extracted-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.report-summary{background:rgba(0,212,170,0.06);border:1px solid rgba(0,212,170,0.2);border-radius:12px;padding:16px;margin-bottom:16px}
+.report-summary-title{font-size:0.78rem;font-weight:700;color:var(--low);text-transform:uppercase;margin-bottom:10px}
+.report-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.84rem}
+body.light-mode .report-row{border-color:rgba(0,0,0,0.05)}
+.report-row:last-child{border:none}
+.report-test{color:var(--text2)}
+.report-val{font-weight:600;color:var(--text)}
+.report-val.normal{color:var(--low)}
+.report-val.abnormal{color:var(--high)}
+.report-val.borderline{color:var(--mod)}
+.divider-text{text-align:center;color:var(--text3);font-size:0.85rem;margin:20px 0}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">HG</div>
+      <span class="nav-logo-text">Health<span>Guard</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-lang="nav_home"></a>
+      <a href="assess.html" class="nav-link" data-lang="nav_check"></a>
+      <a href="upload.html" class="nav-link active" data-lang="nav_upload"></a>
+      <a href="about.html" class="nav-link" data-lang="nav_about"></a>
+    </div>
+    <div class="nav-controls">
+      <button class="lang-btn" id="langHi" onclick="setLang('hi')">Hindi</button>
+      <button class="lang-btn active" id="langEn" onclick="setLang('en')">English</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+    </div>
+  </div>
+</nav>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p class="loading-text">Analyzing your report...</p>
+  <p class="loading-sub">Please wait</p>
+</div>
+
+<div class="wrapper" style="padding-top:30px;padding-bottom:80px">
+  <div style="margin-bottom:28px">
+    <div class="section-label">Doctor Report</div>
+    <div class="section-title">Upload Your Blood Test or Report</div>
+    <div class="section-sub">Upload a lab report PDF or image — we will read the values and assess your health risk</div>
+  </div>
+
+  <!-- FILE UPLOAD -->
+  <div class="card">
+    <div class="card-title">Upload File (PDF, JPG, PNG)</div>
+    <div class="upload-area" id="uploadArea"
+         ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+      <div class="upload-area-title">Click to choose file or drag and drop here</div>
+      <div class="upload-area-sub">PDF, JPG, PNG supported — max 10MB<br/>Blood test report, prescription, lab results</div>
+      <button class="upload-choose-btn" onclick="document.getElementById('fileInput').click()">Choose File</button>
+      <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFileSelect(this)"/>
+    </div>
+    <div class="status-bar" id="uploadStatus"></div>
+    <div class="preview-box" id="previewBox">
+      <div class="preview-box-title" id="previewTitle">Preview</div>
+      <img id="previewImg" class="preview-img" style="display:none"/>
+      <div id="previewText" style="font-size:0.82rem;color:var(--text2);margin-top:8px"></div>
+    </div>
+  </div>
+
+  <div class="divider-text">-- OR --</div>
+
+  <!-- PASTE TEXT -->
+  <div class="card">
+    <div class="card-title">Paste Report Text</div>
+    <div class="field">
+      <label>Copy text from your PDF and paste here</label>
+      <textarea id="reportText" rows="7" placeholder="Paste the text content of your blood report here...
+
+Example from a real report:
+Glucose-Fasting: 86 mg/dL
+HbA1c: 5.2%
+Hemoglobin: 15.1 gm/dL
+Total Cholesterol: 96 mg/dL
+HDL: 42 mg/dL
+Creatinine: 0.9 mg/dL
+Vitamin D: 24.9 ng/mL
+Name: Mr. Sagar, Age: 21, Gender: Male"></textarea>
+    </div>
+    <button class="btn-primary" onclick="analyzeText()" style="margin-top:12px;width:100%">Read and Analyze Report</button>
+  </div>
+
+  <!-- REPORT SUMMARY -->
+  <div id="reportSummarySection" style="display:none">
+    <div style="margin:24px 0 16px">
+      <div class="section-label">Values Found</div>
+      <div class="section-title">Test Results From Report</div>
+      <div class="section-sub">These values were found in your report</div>
+    </div>
+    <div class="report-summary">
+      <div class="report-summary-title">Extracted Test Values</div>
+      <div id="reportRows"></div>
+    </div>
+  </div>
+
+  <!-- EXTRACTED FORM -->
+  <div id="extractedSection" style="display:none">
+    <div style="margin:24px 0 16px">
+      <div class="section-label">Risk Assessment</div>
+      <div class="section-title">Confirm Data Before Assessment</div>
+      <div class="section-sub">Review and correct values if needed</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Basic Information</div>
+      <div class="extracted-row">
+        <div class="field"><label>Age</label><input type="number" id="r-age" placeholder="Age"/></div>
+        <div class="field"><label>Height (cm)</label><input type="number" id="r-height" placeholder="e.g. 170"/></div>
+      </div>
+      <div class="extracted-row">
+        <div class="field"><label>Weight (kg)</label><input type="number" id="r-weight" placeholder="e.g. 65"/></div>
+        <div class="field"><label>Blood Pressure Systolic (mmHg)</label><input type="number" id="r-bp" placeholder="e.g. 120"/></div>
+      </div>
+      <div class="extracted-row">
+        <div class="field"><label>Blood Sugar Fasting (mg/dL)</label><input type="number" id="r-glucose" placeholder="From report"/></div>
+        <div class="field"><label>Medicine (if any)</label><input type="text" id="r-medicine" placeholder="Medicine name"/></div>
+      </div>
+      <div class="field" style="margin-top:8px">
+        <label>Any Symptoms</label>
+        <input type="text" id="r-symptoms" placeholder="e.g. fatigue, dizziness (optional)"/>
+      </div>
+    </div>
+    <div id="extractError" class="error-msg">Age, Height, Weight, BP and Blood Sugar are required to run risk assessment.</div>
+    <button class="submit-btn" onclick="submitExtracted()">Run Full Risk Assessment</button>
+  </div>
+</div>
+
+<footer>
+  <div class="wrapper">
+    <div class="footer-brand">HealthGuard India</div>
+    Powered by USDA FoodData &middot; openFDA &middot; Open Disease API<br/>
+    <strong>Made by Sagar</strong> &middot; Not a medical device
+  </div>
+</footer>
+
+<script src="js/lang.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script>
+function handleDragOver(e){ e.preventDefault(); document.getElementById("uploadArea").classList.add("dragover"); }
+function handleDragLeave(e){ document.getElementById("uploadArea").classList.remove("dragover"); }
+function handleDrop(e){ e.preventDefault(); document.getElementById("uploadArea").classList.remove("dragover"); if(e.dataTransfer.files.length>0) processFile(e.dataTransfer.files[0]); }
+function handleFileSelect(input){ if(input.files.length>0) processFile(input.files[0]); }
+
+function showStatus(msg, type){
+  var b=document.getElementById("uploadStatus");
+  b.innerHTML=msg; b.className="status-bar "+type; b.style.display="block";
+}
+
+function processFile(file){
+  if(file.size>10*1024*1024){ showStatus("File too large. Max 10MB.", "error"); return; }
+  var ext=file.name.split(".").pop().toLowerCase();
+  var previewBox=document.getElementById("previewBox");
+  var previewImg=document.getElementById("previewImg");
+  var previewText=document.getElementById("previewText");
+  document.getElementById("previewTitle").textContent = file.name;
+  previewBox.style.display="block";
+  previewImg.style.display="none";
+
+  if(ext==="pdf"){
+    showStatus("PDF uploaded: <strong>"+file.name+"</strong><br>To extract data from PDF: Open the PDF, press Ctrl+A to select all, Ctrl+C to copy, then paste in the text box below.", "info");
+    previewText.innerHTML="<strong>PDF file:</strong> "+file.name+"<br>Please copy the text from your PDF and paste it in the text box below to extract your test values.";
+    // Show the form so user can fill manually
+    document.getElementById("extractedSection").style.display="block";
+    document.getElementById("extractedSection").scrollIntoView({behavior:"smooth"});
+  } else if(ext==="jpg"||ext==="jpeg"||ext==="png"){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      previewImg.src=e.target.result;
+      previewImg.style.display="block";
+      showStatus("Image loaded: <strong>"+file.name+"</strong><br>Image uploaded successfully. Please fill in the values from your report in the form below.", "success");
+      document.getElementById("extractedSection").style.display="block";
+      document.getElementById("extractedSection").scrollIntoView({behavior:"smooth"});
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function analyzeText(){
+  var text=document.getElementById("reportText").value.trim();
+  if(!text){ alert("Please paste some text first."); return; }
+  var d=parseBloodReport(text);
+  showReportSummary(d);
+  fillExtractedForm(d);
+  document.getElementById("reportSummarySection").style.display="block";
+  document.getElementById("extractedSection").style.display="block";
+  document.getElementById("reportSummarySection").scrollIntoView({behavior:"smooth"});
+}
+
+function parseBloodReport(text){
+  var d={};
+  var lines=text.split(/\n/);
+
+  // Age
+  var ageM=text.match(/age[\/\s:]+(\d{1,3})\s*y/i)||text.match(/(\d{1,3})\s*y\(s\)/i)||text.match(/age[:\s]+(\d{1,3})/i);
+  if(ageM) d.age=parseInt(ageM[1]);
+
+  // Gender
+  if(/female|mahila/i.test(text)) d.gender="female";
+  else if(/male|purush/i.test(text)) d.gender="male";
+
+  // Glucose fasting
+  var glM=text.match(/glucose[-\s]*fasting[:\s]+[:\s]*(\d{2,3})/i)||text.match(/fasting[:\s]+[:\s]*(\d{2,3})/i);
+  if(glM) d.glucose=parseFloat(glM[1]);
+
+  // HbA1c
+  var hbM=text.match(/glycosylated haemoglobin[:\s]+[:\s]*([\d.]+)/i)||text.match(/hba1c[:\s]+([\d.]+)/i);
+  if(hbM) d.hba1c=parseFloat(hbM[1]);
+
+  // Hemoglobin
+  var hbgM=text.match(/hemoglobin \(hb\)[:\s]+[:\s]*([\d.]+)/i)||text.match(/haemoglobin[:\s]+([\d.]+)/i);
+  if(hbgM) d.hemoglobin=parseFloat(hbgM[1]);
+
+  // Cholesterol
+  var chM=text.match(/cholesterol-total[:\s]+[:\s]*(\d+)/i)||text.match(/total cholesterol[:\s]+(\d+)/i);
+  if(chM) d.cholesterol=parseInt(chM[1]);
+
+  var hdlM=text.match(/cholesterol-hdl[:\s]+[:\s]*([\d.]+)/i)||text.match(/hdl[:\s]+([\d.]+)/i);
+  if(hdlM) d.hdl=parseFloat(hdlM[1]);
+
+  var ldlM=text.match(/cholesterol-ldl[:\s]+[:\s]*([\d.]+)/i)||text.match(/ldl[:\s]+([\d.]+)/i);
+  if(ldlM) d.ldl=parseFloat(ldlM[1]);
+
+  var trigM=text.match(/triglycerides[:\s]+[:\s]*(\d+)/i);
+  if(trigM) d.triglycerides=parseInt(trigM[1]);
+
+  // Creatinine
+  var crM=text.match(/creatinine[:\s]+[:\s]*([\d.]+)\s*mg/i);
+  if(crM) d.creatinine=parseFloat(crM[1]);
+
+  // Vitamin D
+  var vdM=text.match(/vit d total[^:]*:[:\s]*([\d.]+)/i)||text.match(/25 \(oh\) vit d[^:]*:[:\s]*([\d.]+)/i)||text.match(/vitamin d[^:]*:[:\s]*([\d.]+)/i);
+  if(vdM) d.vitaminD=parseFloat(vdM[1]);
+
+  // Vitamin B12
+  var b12M=text.match(/vitamin [-–] b12[:\s]+[:\s]*([\d.]+)/i)||text.match(/b12[:\s]+([\d.]+)/i);
+  if(b12M) d.b12=parseFloat(b12M[1]);
+
+  // TSH
+  var tshM=text.match(/thyroid stimulating hormone[:\s]+[:\s]*([\d.]+)/i)||text.match(/tsh[:\s]+([\d.]+)/i);
+  if(tshM) d.tsh=parseFloat(tshM[1]);
+
+  // Urea / BUN
+  var ureM=text.match(/urea[:\s]+[:\s]*(\d+)\s*mg/i);
+  if(ureM) d.urea=parseInt(ureM[1]);
+
+  // eGFR
+  var gfrM=text.match(/e-gfr[^:]*:[:\s]*(\d+)/i)||text.match(/glomerular filtration[^:]*:[:\s]*(\d+)/i);
+  if(gfrM) d.egfr=parseInt(gfrM[1]);
+
+  // ESR
+  var esrM=text.match(/esr[:\s]+[:\s]*(\d+)/i);
+  if(esrM) d.esr=parseInt(esrM[1]);
+
+  // Name
+  var nameM=text.match(/name\s*:\s*mr\.?\s*([a-z]+)/i);
+  if(nameM) d.name=nameM[1];
+
+  // BP - usually not in blood reports, set default
+  d.bp = d.bp || null;
+
+  // Set glucose as blood sugar
+  d.blood_sugar = d.glucose || null;
+
+  return d;
+}
+
+function showReportSummary(d){
+  var rows=document.getElementById("reportRows");
+  var items=[
+    {label:"Patient Name",   val:d.name,         unit:"",       low:null, high:null},
+    {label:"Age",            val:d.age,           unit:"years",  low:null, high:null},
+    {label:"Gender",         val:d.gender,        unit:"",       low:null, high:null},
+    {label:"Glucose Fasting",val:d.glucose,       unit:"mg/dL",  low:74,  high:109},
+    {label:"HbA1c",          val:d.hba1c,         unit:"%",      low:null,high:6.5},
+    {label:"Hemoglobin",     val:d.hemoglobin,    unit:"g/dL",   low:13,  high:17},
+    {label:"Total Cholesterol",val:d.cholesterol, unit:"mg/dL",  low:null,high:200},
+    {label:"HDL",            val:d.hdl,           unit:"mg/dL",  low:40,  high:null},
+    {label:"LDL",            val:d.ldl,           unit:"mg/dL",  low:null,high:100},
+    {label:"Triglycerides",  val:d.triglycerides, unit:"mg/dL",  low:null,high:150},
+    {label:"Creatinine",     val:d.creatinine,    unit:"mg/dL",  low:0.7, high:1.2},
+    {label:"Vitamin D",      val:d.vitaminD,      unit:"ng/mL",  low:30,  high:100},
+    {label:"Vitamin B12",    val:d.b12,           unit:"pg/mL",  low:180, high:914},
+    {label:"TSH",            val:d.tsh,           unit:"uIU/mL", low:0.3, high:5.5},
+    {label:"e-GFR",          val:d.egfr,          unit:"ml/min", low:60,  high:null},
+    {label:"ESR",            val:d.esr,           unit:"mm/hr",  low:null,high:15}
+  ];
+  rows.innerHTML="";
+  items.forEach(function(item){
+    if(item.val===undefined||item.val===null) return;
+    var cls="normal";
+    if(typeof item.val==="number"){
+      if(item.high&&item.val>item.high) cls="abnormal";
+      else if(item.low&&item.val<item.low) cls=(item.label==="HDL"||item.label==="e-GFR"||item.label==="Vitamin D"||item.label==="Vitamin B12")?"abnormal":"borderline";
+    }
+    rows.innerHTML+="<div class='report-row'><span class='report-test'>"+item.label+"</span><span class='report-val "+cls+"'>"+item.val+(item.unit?" "+item.unit:"")+"</span></div>";
+  });
+}
+
+function fillExtractedForm(d){
+  if(d.age)     document.getElementById("r-age").value     = d.age;
+  if(d.glucose) document.getElementById("r-glucose").value = d.glucose;
+  // Height and weight not usually in blood reports - leave for user to fill
+  // BP not in blood reports - leave for user
+  if(d.vitaminD<20) document.getElementById("r-symptoms").value = "fatigue, possible vitamin D deficiency";
+}
+
+async function submitExtracted(){
+  var age    =document.getElementById("r-age").value;
+  var height =document.getElementById("r-height").value;
+  var weight =document.getElementById("r-weight").value;
+  var bp     =document.getElementById("r-bp").value;
+  var glucose=document.getElementById("r-glucose").value;
+  var sym    =document.getElementById("r-symptoms").value;
+  var med    =document.getElementById("r-medicine").value;
+  var errEl  =document.getElementById("extractError");
+
+  if(!age||!height||!weight||!bp||!glucose){
+    errEl.style.display="block";
+    errEl.scrollIntoView({behavior:"smooth",block:"center"});
+    return;
+  }
+  errEl.style.display="none";
+  document.getElementById("loadingOverlay").classList.add("show");
+
+  try{
+    var riskRes=await fetchRiskAssessment({age:age,height:height,weight:weight,bp:bp,glucose:glucose,familyHistory:"no",smoking:"no",activity:"sedentary"});
+    var result=riskRes.data;
+    var symptomResult=null;
+    if(sym){
+      try{
+        var parsed=await parseSymptoms(sym,Number(age),"male");
+        var mentions=(parsed.data&&parsed.data.mentions)||[];
+        symptomResult=(await checkSymptoms(mentions,Number(age),"male",sym)).data;
+      }catch(e){console.warn(e);}
+    }
+    var drugData=null;
+    if(med){try{drugData=(await fetchDrugData(med.split(",")[0].trim())).data;}catch(e){}}
+    document.getElementById("loadingOverlay").classList.remove("show");
+    var payload={result:result,nutritionData:null,drugData:drugData,symptomResult:symptomResult,providerData:null,diseaseStats:null,medication:med,flags:{showNutrition:false,showDisease:false}};
+    sessionStorage.setItem("hg_results",JSON.stringify(payload));
+    window.location.href="results.html";
+  }catch(err){
+    document.getElementById("loadingOverlay").classList.remove("show");
+    alert("Error: "+err.message+"\n\nIs backend running at localhost:5000?");
+  }
+}
+</script>
+</body>
+</html>

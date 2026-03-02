@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Health Check - HealthGuard India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+<div class="bg-glow"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">HG</div>
+      <span class="nav-logo-text">Health<span>Guard</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-lang="nav_home"></a>
+      <a href="assess.html" class="nav-link active" data-lang="nav_check"></a>
+      <a href="upload.html" class="nav-link" data-lang="nav_upload"></a>
+      <a href="diet.html" class="nav-link" data-lang="nav_diet"></a>
+      <a href="family.html" class="nav-link" data-lang="nav_family"></a>
+      <a href="tips.html" class="nav-link" data-lang="nav_tips"></a>
+      <a href="about.html" class="nav-link" data-lang="nav_about"></a>
+    </div>
+    <div class="nav-controls">
+      <button class="lang-btn" id="langHi" onclick="setLang('hi')">Hindi</button>
+      <button class="lang-btn active" id="langEn" onclick="setLang('en')">English</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+    </div>
+  </div>
+</nav>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p class="loading-text" data-lang="loading_text"></p>
+  <p class="loading-sub" data-lang="loading_sub"></p>
+</div>
+<div class="wrapper" style="padding-top:30px;padding-bottom:80px">
+  <div style="margin-bottom:28px">
+    <div class="section-label" data-lang="form_label"></div>
+    <div class="section-title" data-lang="form_title"></div>
+    <div class="section-sub" data-lang="form_sub"></div>
+  </div>
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-title" data-lang="toggle_label"></div>
+    <div class="feature-toggles">
+      <label class="feature-toggle checked" id="toggle-symptoms">
+        <input type="checkbox" checked onchange="toggleFeature('symptoms',this)"/>
+        <span class="feature-toggle-label" data-lang="f2_title"></span>
+      </label>
+      <label class="feature-toggle checked" id="toggle-medicine">
+        <input type="checkbox" checked onchange="toggleFeature('medicine',this)"/>
+        <span class="feature-toggle-label" data-lang="f5_title"></span>
+      </label>
+      <label class="feature-toggle checked" id="toggle-hospital">
+        <input type="checkbox" checked onchange="toggleFeature('hospital',this)"/>
+        <span class="feature-toggle-label" data-lang="f4_title"></span>
+      </label>
+      <label class="feature-toggle checked" id="toggle-nutrition">
+        <input type="checkbox" checked onchange="toggleFeature('nutrition',this)"/>
+        <span class="feature-toggle-label" data-lang="nutrition_title"></span>
+      </label>
+      <label class="feature-toggle checked" id="toggle-disease">
+        <input type="checkbox" checked onchange="toggleFeature('disease',this)"/>
+        <span class="feature-toggle-label" data-lang="f6_title"></span>
+      </label>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" data-lang="basic_title"></div>
+    <div class="form-grid three">
+      <div class="field"><label data-lang="age_label"></label><input type="number" id="age" placeholder="35" min="18" max="120"/></div>
+      <div class="field">
+        <label data-lang="gender_label"></label>
+        <select id="gender">
+          <option value="" data-lang="gender_select"></option>
+          <option value="male" data-lang="gender_male"></option>
+          <option value="female" data-lang="gender_female"></option>
+          <option value="other" data-lang="gender_other"></option>
+        </select>
+      </div>
+      <div class="field"><label data-lang="height_label"></label><input type="number" id="height" placeholder="165" min="100" max="250"/></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label data-lang="weight_label"></label><input type="number" id="weight" placeholder="70" min="20" max="300"/></div>
+      <div class="field"><label data-lang="bp_label"></label><input type="number" id="bp" placeholder="120" min="60" max="250"/><span class="field-hint" data-lang="bp_hint"></span></div>
+    </div>
+    <div class="form-grid one">
+      <div class="field"><label data-lang="glucose_label"></label><input type="number" id="glucose" placeholder="95" min="40" max="600"/><span class="field-hint" data-lang="glucose_hint"></span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" data-lang="lifestyle_title"></div>
+    <div class="form-grid">
+      <div class="field">
+        <label data-lang="family_label"></label>
+        <div class="toggle-group" id="familyHistory">
+          <button class="toggle-btn" data-value="no" data-lang="family_no"></button>
+          <button class="toggle-btn" data-value="yes" data-lang="family_yes"></button>
+        </div>
+      </div>
+      <div class="field">
+        <label data-lang="smoking_label"></label>
+        <div class="toggle-group" id="smoking">
+          <button class="toggle-btn" data-value="no" data-lang="smoking_no"></button>
+          <button class="toggle-btn" data-value="yes" data-lang="smoking_yes"></button>
+        </div>
+      </div>
+    </div>
+    <div class="form-grid one" style="margin-top:14px">
+      <div class="field">
+        <label data-lang="activity_label"></label>
+        <div class="toggle-group" id="activity">
+          <button class="toggle-btn" data-value="sedentary" data-lang="act_sedentary"></button>
+          <button class="toggle-btn" data-value="light" data-lang="act_light"></button>
+          <button class="toggle-btn" data-value="moderate" data-lang="act_moderate"></button>
+          <button class="toggle-btn" data-value="active" data-lang="act_active"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" id="section-symptoms">
+    <div class="card-title" data-lang="symptom_title"></div>
+    <div class="field">
+      <label data-lang="symptom_label"></label>
+      <textarea id="symptomText" rows="4" data-lang="symptom_placeholder" data-lang-attr="placeholder"></textarea>
+      <span class="field-hint" data-lang="symptom_hint"></span>
+    </div>
+    <div class="symptom-tags" id="symptomTags"></div>
+  </div>
+  <div class="card" id="section-medicine">
+    <div class="card-title" data-lang="medicine_title"></div>
+    <div class="field">
+      <label data-lang="medicine_label"></label>
+      <input type="text" id="medication" data-lang="medicine_placeholder" data-lang-attr="placeholder"/>
+      <span class="field-hint" data-lang="medicine_hint"></span>
+    </div>
+  </div>
+  <div class="card" id="section-hospital">
+    <div class="card-title" data-lang="hospital_title"></div>
+    <div class="form-grid">
+      <div class="field">
+        <label data-lang="city_label"></label>
+        <input type="text" id="cityInput" data-lang="city_placeholder" data-lang-attr="placeholder"/>
+        <span class="field-hint" data-lang="city_hint"></span>
+      </div>
+      <div class="field">
+        <label data-lang="specialty_label"></label>
+        <select id="providerSpecialty">
+          <option value="general" data-lang="spec_general"></option>
+          <option value="cardiology" data-lang="spec_cardiology"></option>
+          <option value="endocrinology" data-lang="spec_endo"></option>
+          <option value="internal" data-lang="spec_internal"></option>
+          <option value="nutrition" data-lang="spec_nutrition"></option>
+          <option value="psychiatry" data-lang="spec_psychiatry"></option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="formError" class="error-msg" data-lang="form_error"></div>
+  <button class="submit-btn" id="submitBtn" data-lang="submit_btn"></button>
+</div>
+<footer>
+  <div class="wrapper">
+    <div class="footer-brand">HealthGuard India</div>
+    <strong data-lang="footer_made"></strong> &middot; Not a medical device
+  </div>
+</footer>
+<script src="js/lang.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

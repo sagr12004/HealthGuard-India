@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Results - HealthGuard India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="bg-glow"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">HG</div>
+      <span class="nav-logo-text">Health<span>Guard</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link" data-lang="nav_home"></a>
+      <a href="assess.html" class="nav-link" data-lang="nav_check"></a>
+      <a href="upload.html" class="nav-link" data-lang="nav_upload"></a>
+      <a href="about.html" class="nav-link" data-lang="nav_about"></a>
+    </div>
+    <div class="nav-controls">
+      <button class="lang-btn" id="langHi" onclick="setLang('hi')">Hindi</button>
+      <button class="lang-btn active" id="langEn" onclick="setLang('en')">English</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+    </div>
+  </div>
+</nav>
+<div class="wrapper" style="padding-top:30px;padding-bottom:80px">
+  <div id="noData" style="text-align:center;padding:80px 20px;display:none">
+    <div style="font-size:4rem;font-weight:800;color:var(--accent);margin-bottom:16px">?</div>
+    <div style="font-size:1.2rem;font-weight:700;margin-bottom:10px;color:var(--text)">No Data Found</div>
+    <div style="font-size:0.88rem;color:var(--text2);margin-bottom:24px">Please do health check first.</div>
+    <a href="assess.html" class="btn-primary" data-lang="nav_check"></a>
+  </div>
+  <div id="resultsContent" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div>
+        <div class="section-label" data-lang="results_label"></div>
+        <div class="section-title" data-lang="results_title"></div>
+      </div>
+      <a href="assess.html" class="btn-secondary" style="font-size:0.85rem;padding:10px 18px" data-lang="reassess"></a>
+    </div>
+    <div class="risk-card" id="riskCard">
+      <div class="risk-top">
+        <div>
+          <div class="risk-level-label" data-lang="risk_label"></div>
+          <div class="risk-level-text" id="riskLevelText"></div>
+          <div class="risk-explanation" id="riskExplanation"></div>
+        </div>
+        <div class="risk-score-big">
+          <div class="risk-score-num" id="riskPercent"></div>
+          <div class="risk-score-label">Risk Score</div>
+        </div>
+      </div>
+      <div class="gauge-track"><div class="gauge-fill" id="gaugeFill" style="width:0%"></div></div>
+      <div class="gauge-labels"><span>0%</span><span data-lang="gauge_low"></span><span data-lang="gauge_mod"></span><span data-lang="gauge_high"></span><span>100%</span></div>
+      <div class="factors-grid" id="factorsGrid"></div>
+    </div>
+    <div class="bmi-card">
+      <div class="bmi-left">
+        <div class="label" data-lang="bmi_label"></div>
+        <div class="value" id="bmiValue"></div>
+        <div class="note" id="bmiNote"></div>
+      </div>
+      <div id="bmiCat" class="bmi-badge"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title" data-lang="chart_title"></div>
+      <div class="chart-wrap"><canvas id="riskChart"></canvas></div>
+    </div>
+    <div class="info-grid" id="infoGrid" style="display:none">
+      <div class="info-card" id="nutritionCard" style="display:none">
+        <div class="info-card-title" data-lang="nutrition_title"></div>
+        <div id="nutrientList"></div>
+      </div>
+      <div class="info-card" id="drugCard" style="display:none">
+        <div class="info-card-title" data-lang="drug_title"></div>
+        <div id="drugInfo"></div>
+      </div>
+    </div>
+    <div id="symptomResults" class="chart-card" style="display:none"></div>
+    <div id="providerResults" class="chart-card" style="display:none"></div>
+    <div id="diseaseStats" class="chart-card" style="display:none"></div>
+    <div class="rec-card">
+      <div class="rec-card-title" data-lang="rec_title"></div>
+      <div id="recList"></div>
+    </div>
+    <div class="notice-card">
+      <p data-lang="notice"></p>
+    </div>
+    <button class="reassess-btn" onclick="window.location.href='assess.html'" data-lang="reassess"></button>
+  </div>
+</div>
+<footer>
+  <div class="wrapper">
+    <div class="footer-brand">HealthGuard India</div>
+    Powered by USDA FoodData &middot; openFDA &middot; Open Disease API<br/>
+    <strong data-lang="footer_made"></strong> &middot; Not a medical device
+  </div>
+</footer>
+<script src="js/lang.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/results.js"></script>
+</body>
+</html>

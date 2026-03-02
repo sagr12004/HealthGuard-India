@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>HealthGuard India - Free Health Risk Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+<div class="bg-glow"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">HG</div>
+      <span class="nav-logo-text">Health<span>Guard</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active" data-lang="nav_home"></a>
+      <a href="assess.html" class="nav-link" data-lang="nav_check"></a>
+      <a href="upload.html" class="nav-link" data-lang="nav_upload"></a>
+      <a href="diet.html" class="nav-link" data-lang="nav_diet"></a>
+      <a href="family.html" class="nav-link" data-lang="nav_family"></a>
+      <a href="tips.html" class="nav-link" data-lang="nav_tips"></a>
+      <a href="about.html" class="nav-link" data-lang="nav_about"></a>
+    </div>
+    <div class="nav-controls">
+      <button class="lang-btn" id="langHi" onclick="setLang('hi')">Hindi</button>
+      <button class="lang-btn active" id="langEn" onclick="setLang('en')">English</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+    </div>
+  </div>
+</nav>
+<div class="wrapper">
+  <section class="hero">
+    <div class="hero-badge" data-lang="hero_badge"></div>
+    <h1 class="hero-title">
+      <span data-lang="hero_title_1"></span><br/>
+      <em data-lang="hero_title_2"></em>
+    </h1>
+    <p class="hero-sub" data-lang="hero_sub"></p>
+    <div class="hero-btns">
+      <a href="assess.html" class="btn-primary" data-lang="btn_check"></a>
+      <a href="upload.html" class="btn-secondary" data-lang="btn_upload"></a>
+    </div>
+  </section>
+  <div class="disclaimer">
+    <strong>Note: </strong><span data-lang="disclaimer"></span>
+  </div>
+  <div class="section-divider"></div>
+  <div style="margin-bottom:16px">
+    <div class="section-label" data-lang="features_label"></div>
+    <div class="section-title" data-lang="features_title"></div>
+    <div class="section-sub" data-lang="features_sub"></div>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card"><div class="feature-card-num">01</div><div class="feature-card-title" data-lang="f1_title"></div><div class="feature-card-desc" data-lang="f1_desc"></div></div>
+    <div class="feature-card"><div class="feature-card-num">02</div><div class="feature-card-title" data-lang="f2_title"></div><div class="feature-card-desc" data-lang="f2_desc"></div></div>
+    <div class="feature-card"><div class="feature-card-num">03</div><div class="feature-card-title" data-lang="f3_title"></div><div class="feature-card-desc" data-lang="f3_desc"></div></div>
+    <div class="feature-card"><div class="feature-card-num">04</div><div class="feature-card-title" data-lang="f4_title"></div><div class="feature-card-desc" data-lang="f4_desc"></div></div>
+    <div class="feature-card"><div class="feature-card-num">05</div><div class="feature-card-title" data-lang="f5_title"></div><div class="feature-card-desc" data-lang="f5_desc"></div></div>
+    <div class="feature-card"><div class="feature-card-num">06</div><div class="feature-card-title" data-lang="f6_title"></div><div class="feature-card-desc" data-lang="f6_desc"></div></div>
+    <div class="feature-card"><div class="feature-card-num">07</div><div class="feature-card-title" data-lang="f7_title"></div><div class="feature-card-desc" data-lang="f7_desc"></div></div>
+    <div class="feature-card"><div class="feature-card-num">08</div><div class="feature-card-title" data-lang="f8_title"></div><div class="feature-card-desc" data-lang="f8_desc"></div></div>
+  </div>
+  <div class="section-divider"></div>
+  <div style="margin-bottom:16px">
+    <div class="section-label" data-lang="steps_label"></div>
+    <div class="section-title" data-lang="steps_title"></div>
+  </div>
+  <div class="feature-grid">
+    <div class="step-card"><div class="step-num">1</div><div class="step-title" data-lang="step1_title"></div><div class="step-desc" data-lang="step1_desc"></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-title" data-lang="step2_title"></div><div class="step-desc" data-lang="step2_desc"></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-title" data-lang="step3_title"></div><div class="step-desc" data-lang="step3_desc"></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-title" data-lang="step4_title"></div><div class="step-desc" data-lang="step4_desc"></div></div>
+  </div>
+  <div style="text-align:center;margin:40px 0">
+    <a href="assess.html" class="btn-primary" style="font-size:1.05rem;padding:16px 36px" data-lang="cta"></a>
+  </div>
+  <!-- QUICK SHARE STRIP -->
+  <div style="background:linear-gradient(135deg,rgba(37,211,102,0.08),rgba(37,211,102,0.03));border:1px solid rgba(37,211,102,0.2);border-radius:18px;padding:24px;margin-bottom:40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px">
+    <div>
+      <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:4px">Share HealthGuard India</div>
+      <div style="font-size:0.82rem;color:var(--text2)">Help your family check their health risk for free</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button onclick="shareWA()" style="padding:10px 20px;background:#25D366;border:none;border-radius:10px;color:white;font-family:var(--font);font-size:0.88rem;font-weight:600;cursor:pointer">Share on WhatsApp</button>
+      <button onclick="copySiteLink()" style="padding:10px 16px;background:var(--card);border:1px solid var(--border2);border-radius:10px;color:var(--text2);font-family:var(--font);font-size:0.84rem;cursor:pointer">Copy Link</button>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="wrapper">
+    <div class="footer-brand">HealthGuard India</div>
+    Powered by USDA FoodData &middot; openFDA &middot; Open Disease API<br/>
+    <strong data-lang="footer_made"></strong> &middot; Not a medical device
+  </div>
+</footer>
+<script src="js/lang.js"></script>
+<script src="js/theme.js"></script>
+<script>
+function shareWA(){
+  var msg="HealthGuard India - Free health risk calculator made for India!\n\nCheck your risk for diabetes, BP, heart disease.\nAdd family members and track together.\nGet personalized Indian diet plans.\n\nAll free: https://healthguardindia.com";
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+function copySiteLink(){
+  navigator.clipboard.writeText("HealthGuard India - Free health check for Indians: https://healthguardindia.com").then(function(){ alert("Link copied!"); });
+}
+</script>
+</body>
+</html>

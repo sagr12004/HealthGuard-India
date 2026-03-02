@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Health Tips - HealthGuard India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<style>
+.tips-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.tfilter{padding:8px 16px;border-radius:10px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:var(--font);font-size:0.82rem;cursor:pointer;transition:all 0.2s}
+.tfilter.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border-color:transparent;font-weight:600}
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:24px}
+.tip-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:20px;box-shadow:var(--shadow);transition:all 0.2s;cursor:pointer}
+.tip-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.15);border-color:var(--accent)}
+.tip-cat-badge{font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:8px;display:inline-block;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em}
+.tip-cat-badge.sugar{background:rgba(255,68,102,0.12);color:#ff4466}
+.tip-cat-badge.bp{background:rgba(99,102,241,0.12);color:#a5b4fc}
+.tip-cat-badge.general{background:rgba(0,212,170,0.12);color:var(--low)}
+.tip-cat-badge.nutrition{background:rgba(255,165,0,0.12);color:var(--mod)}
+.tip-cat-badge.fitness{background:rgba(168,85,247,0.12);color:#c084fc}
+.tip-cat-badge.mental{background:rgba(14,165,233,0.12);color:#7dd3fc}
+.tip-en{font-size:0.92rem;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px}
+.tip-hi{font-size:0.88rem;color:var(--text2);line-height:1.6;font-family:"Noto Sans Devanagari",sans-serif}
+.tip-source{font-size:0.7rem;color:var(--text3);margin-top:8px}
+.tip-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.tip-wa{padding:6px 12px;background:#25D366;border:none;border-radius:8px;color:white;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:var(--font)}
+.tip-copy{padding:6px 12px;background:var(--card2);border:1px solid var(--border2);border-radius:8px;color:var(--text2);font-size:0.75rem;cursor:pointer;font-family:var(--font)}
+.tip-of-day{background:linear-gradient(135deg,rgba(255,107,0,0.1),rgba(255,165,0,0.05));border:1px solid rgba(255,107,0,0.25);border-radius:18px;padding:24px;margin-bottom:24px}
+.tip-of-day-label{font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+.tip-of-day-en{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.5}
+.tip-of-day-hi{font-size:0.95rem;color:var(--text2);font-family:"Noto Sans Devanagari",sans-serif;line-height:1.6}
+.search-bar{width:100%;padding:12px 16px;border-radius:12px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-family:var(--font);font-size:0.9rem;outline:none;margin-bottom:16px;box-sizing:border-box}
+.search-bar:focus{border-color:var(--accent)}
+.tip-count{font-size:0.82rem;color:var(--text3);margin-bottom:16px}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">HG</div>
+      <span class="nav-logo-text">Health<span>Guard</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="assess.html" class="nav-link">Check Health</a>
+      <a href="upload.html" class="nav-link">Upload Report</a>
+      <a href="diet.html" class="nav-link">Diet Plan</a>
+      <a href="family.html" class="nav-link">Family</a>
+      <a href="tips.html" class="nav-link active">Health Tips</a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+    <div class="nav-controls">
+      <button class="lang-btn" id="langHi" onclick="setLang('hi')">Hindi</button>
+      <button class="lang-btn active" id="langEn" onclick="setLang('en')">English</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+    </div>
+  </div>
+</nav>
+
+<div class="wrapper" style="padding-top:30px;padding-bottom:80px">
+  <div style="margin-bottom:20px">
+    <div class="section-label">Did You Know?</div>
+    <div class="section-title">Health Tips for India</div>
+    <div class="section-sub">Simple health facts in Hindi and English. Share them on WhatsApp!</div>
+  </div>
+
+  <!-- TIP OF THE DAY -->
+  <div class="tip-of-day" id="tipOfDay">
+    <div class="tip-of-day-label">Tip of the Day</div>
+    <div class="tip-of-day-en" id="todayEn"></div>
+    <div class="tip-of-day-hi" id="todayHi"></div>
+    <div class="tip-actions" style="margin-top:14px">
+      <button class="tip-wa" onclick="shareTipOfDay()">Share on WhatsApp</button>
+      <button class="tip-copy" onclick="copyTipOfDay()">Copy Tip</button>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <input class="search-bar" id="searchBar" placeholder="Search tips... (e.g. methi, sugar, sleep, BP)" oninput="filterTips()"/>
+
+  <!-- FILTER TABS -->
+  <div class="tips-filter">
+    <button class="tfilter active" onclick="filterCat('all',this)">All Tips</button>
+    <button class="tfilter" onclick="filterCat('sugar',this)">Blood Sugar</button>
+    <button class="tfilter" onclick="filterCat('bp',this)">Blood Pressure</button>
+    <button class="tfilter" onclick="filterCat('nutrition',this)">Nutrition</button>
+    <button class="tfilter" onclick="filterCat('fitness',this)">Exercise</button>
+    <button class="tfilter" onclick="filterCat('mental',this)">Mental Health</button>
+    <button class="tfilter" onclick="filterCat('general',this)">General</button>
+  </div>
+
+  <div class="tip-count" id="tipCount"></div>
+  <div class="tips-grid" id="tipsGrid"></div>
+</div>
+
+<footer>
+  <div class="wrapper">
+    <div class="footer-brand">HealthGuard India</div>
+    <strong>Made by Sagar</strong> &middot; Not a medical device
+  </div>
+</footer>
+
+<script src="js/lang.js"></script>
+<script src="js/theme.js"></script>
+<script>
+var ALL_TIPS = [
+  {cat:"sugar", en:"Did you know? Eating methi (fenugreek) seeds daily can reduce blood sugar by up to 13%. Soak 1 tsp overnight and eat in the morning.", hi:"क्या आप जानते हैं? रोज मेथी के बीज खाने से ब्लड शुगर 13% तक कम हो सकती है। रात को 1 चम्मच भिगोकर सुबह खाएं।"},
+  {cat:"sugar", en:"Bitter gourd (karela) juice daily reduces blood sugar naturally. Drink 30ml on empty stomach for best results.", hi:"रोज करेले का जूस पीने से ब्लड शुगर कुदरती तौर पर कम होती है। खाली पेट 30ml पिएं।"},
+  {cat:"sugar", en:"Walking 30 minutes after meals reduces blood sugar spike by up to 22%. It is the most effective free medicine.", hi:"खाने के बाद 30 मिनट चलना ब्लड शुगर को 22% तक कम करता है। यह सबसे प्रभावी मुफ्त दवाई है।"},
+  {cat:"sugar", en:"Cinnamon (dalchini) in your chai reduces blood sugar. Add half a teaspoon of dalchini powder to your tea daily.", hi:"चाय में दालचीनी मिलाने से ब्लड शुगर कम होती है। रोज आधा चम्मच दालचीनी पाउडर चाय में डालें।"},
+  {cat:"sugar", en:"Jamun (black plum) seeds are a traditional Indian diabetes remedy. Dry and powder the seeds, take with water twice daily.", hi:"जामुन के बीज मधुमेह का पारंपरिक इलाज है। बीजों को सुखाकर पाउडर बना लें, दिन में दो बार पानी के साथ लें।"},
+  {cat:"sugar", en:"Brown rice has a much lower glycemic index than white rice. Switch to brown rice or reduce portion size of white rice.", hi:"ब्राउन राइस का ग्लाइसेमिक इंडेक्स सफेद चावल से काफी कम है। ब्राउन राइस खाएं या सफेद चावल कम करें।"},
+  {cat:"sugar", en:"Eating slowly and chewing well reduces blood sugar after meals. Take at least 20 minutes to finish a meal.", hi:"धीरे खाने और अच्छे से चबाने से खाने के बाद ब्लड शुगर कम रहती है। खाना खाने में कम से कम 20 मिनट लें।"},
+  {cat:"bp", en:"Coconut water has natural potassium that lowers blood pressure. Drink 1 glass daily, especially in summer.", hi:"नारियल पानी में प्राकृतिक पोटेशियम होता है जो ब्लड प्रेशर कम करता है। रोज 1 गिलास पिएं, गर्मियों में जरूर।"},
+  {cat:"bp", en:"Amla (Indian gooseberry) is proven to reduce blood pressure. Eat 1-2 raw amlas daily or drink amla juice.", hi:"आंवला ब्लड प्रेशर कम करने में सिद्ध है। रोज 1-2 कच्चे आंवले खाएं या आंवले का जूस पिएं।"},
+  {cat:"bp", en:"Reduce salt intake drastically. Most Indians eat 3x the recommended salt. Switch to rock salt (sendha namak) in smaller amounts.", hi:"नमक कम करें। ज्यादातर भारतीय जरूरत से 3 गुना ज्यादा नमक खाते हैं। सेंधा नमक कम मात्रा में इस्तेमाल करें।"},
+  {cat:"bp", en:"Banana is rich in potassium which directly lowers BP. Eat 1-2 bananas daily. It is a natural BP medicine.", hi:"केले में पोटेशियम होता है जो सीधे BP कम करता है। रोज 1-2 केले खाएं। यह एक प्राकृतिक BP की दवाई है।"},
+  {cat:"bp", en:"Deep breathing for 5 minutes lowers blood pressure immediately. Try 4-7-8 breathing: inhale 4 sec, hold 7, exhale 8.", hi:"5 मिनट की गहरी सांस तुरंत ब्लड प्रेशर कम करती है। 4-7-8 सांस आजमाएं: 4 सेकंड सांस लें, 7 रोकें, 8 में छोड़ें।"},
+  {cat:"bp", en:"Garlic (lehsun) reduces blood pressure. Eat 1-2 raw garlic cloves daily on empty stomach with water.", hi:"लहसुन ब्लड प्रेशर कम करता है। खाली पेट पानी के साथ 1-2 कच्ची लहसुन की कली खाएं।"},
+  {cat:"nutrition", en:"Your Vitamin D (24.9 ng/mL) is in insufficient range. Sit in morning sunlight from 7-9 AM for 20-30 minutes. This is free and very effective.", hi:"आपका विटामिन D कम है। सुबह 7-9 बजे 20-30 मिनट धूप में बैठें। यह मुफ्त और बहुत प्रभावी है।"},
+  {cat:"nutrition", en:"Vitamin B12 is mainly found in animal products. If vegetarian, eat curd, paneer and fortified milk daily. Consider methylcobalamin supplement.", hi:"विटामिन B12 ज्यादातर जानवरों से मिलता है। शाकाहारी हैं तो रोज दही, पनीर और फोर्टिफाइड दूध खाएं।"},
+  {cat:"nutrition", en:"Iron deficiency is very common in Indian women. Eat spinach, dates, jaggery, and drink lemon juice with meals for better iron absorption.", hi:"भारतीय महिलाओं में आयरन की कमी बहुत आम है। पालक, खजूर, गुड़ खाएं और बेहतर अवशोषण के लिए खाने के साथ नींबू पिएं।"},
+  {cat:"nutrition", en:"Ghee in moderation is healthy. 1 teaspoon of desi ghee daily improves digestion and provides fat-soluble vitamins. It is not the enemy.", hi:"सीमित मात्रा में घी स्वास्थ्यवर्धक है। रोज 1 चम्मच देसी घी से पाचन सुधरता है और वसा-घुलनशील विटामिन मिलते हैं।"},
+  {cat:"nutrition", en:"Turmeric (haldi) with black pepper is 2000% more bioavailable. Always add a pinch of black pepper to your haldi milk or food.", hi:"काली मिर्च के साथ हल्दी 2000% ज्यादा शरीर में अवशोषित होती है। हल्दी वाले दूध या खाने में हमेशा चुटकी काली मिर्च डालें।"},
+  {cat:"nutrition", en:"Ragi (finger millet) has the highest calcium of any grain - more than milk! Make ragi roti or porridge for strong bones.", hi:"रागी में किसी भी अनाज से सबसे ज्यादा कैल्शियम है - दूध से भी ज्यादा! मजबूत हड्डियों के लिए रागी रोटी या दलिया बनाएं।"},
+  {cat:"nutrition", en:"Coconut oil is better than refined oil for cooking. But use any oil in moderation. Best oils: mustard oil, coconut oil, groundnut oil.", hi:"रिफाइंड तेल से बेहतर है नारियल तेल। लेकिन कोई भी तेल सीमित मात्रा में। सबसे अच्छे तेल: सरसों, नारियल, मूंगफली।"},
+  {cat:"nutrition", en:"Flaxseeds (alsi) are a superfood. 1 tablespoon daily provides omega-3, fiber, and lignans. Add to roti dough, curd, or salad.", hi:"अलसी (flaxseed) एक सुपरफूड है। रोज 1 चम्मच में omega-3, फाइबर और लिग्नान मिलते हैं। रोटी के आटे, दही या सलाद में मिलाएं।"},
+  {cat:"fitness", en:"Walking is the best free exercise. 10,000 steps daily reduces risk of diabetes by 35%, heart disease by 30%, and depression by 26%.", hi:"चलना सबसे अच्छा मुफ्त व्यायाम है। रोज 10,000 कदम से मधुमेह का खतरा 35%, हृदय रोग 30% और अवसाद 26% कम होता है।"},
+  {cat:"fitness", en:"Surya Namaskar (Sun Salutation) is a complete exercise. 12 rounds daily = 288 powerful yoga poses. It is free, needs no gym.", hi:"सूर्य नमस्कार एक पूर्ण व्यायाम है। 12 राउंड रोज = 288 शक्तिशाली योग मुद्राएं। यह मुफ्त है, जिम की जरूरत नहीं।"},
+  {cat:"fitness", en:"Exercise is more effective than many medicines. 150 minutes of moderate exercise per week reduces all-cause mortality by 33%.", hi:"व्यायाम कई दवाओं से ज्यादा प्रभावी है। हफ्ते में 150 मिनट मध्यम व्यायाम से मृत्यु दर 33% कम होती है।"},
+  {cat:"fitness", en:"Climbing stairs is excellent cardio. Taking stairs instead of lift for 10 minutes burns 100 calories and strengthens heart.", hi:"सीढ़ियां चढ़ना बेहतरीन कार्डियो है। लिफ्ट की जगह 10 मिनट सीढ़ियां चढ़ने से 100 कैलोरी जलती है और दिल मजबूत होता है।"},
+  {cat:"fitness", en:"Yoga pranayama (breathing exercises) for 20 minutes daily reduces stress hormones by 50% and improves lung function.", hi:"रोज 20 मिनट योग प्राणायाम से तनाव हार्मोन 50% कम होते हैं और फेफड़ों की क्षमता बढ़ती है।"},
+  {cat:"fitness", en:"Squatting (sitting on the floor) is natural for Indians and very healthy. 20 squats daily strengthen knees and improve digestion.", hi:"जमीन पर बैठना भारतीयों के लिए स्वाभाविक और बहुत स्वास्थ्यवर्धक है। रोज 20 स्क्वाट से घुटने मजबूत होते हैं और पाचन सुधरता है।"},
+  {cat:"mental", en:"Poor sleep increases diabetes risk by 48% and obesity risk by 55%. Adults need 7-9 hours of sleep. Sleep is not laziness.", hi:"खराब नींद से मधुमेह का खतरा 48% और मोटापे का 55% बढ़ता है। वयस्कों को 7-9 घंटे की नींद चाहिए। नींद आलस नहीं है।"},
+  {cat:"mental", en:"Stress raises blood sugar and BP directly. 10 minutes of meditation daily is clinically proven to reduce cortisol (stress hormone).", hi:"तनाव सीधे ब्लड शुगर और BP बढ़ाता है। रोज 10 मिनट ध्यान से कोर्टिसोल (तनाव हार्मोन) कम होता है - यह क्लिनिकली प्रमाणित है।"},
+  {cat:"mental", en:"Social connection is medicine. Lonely people have 29% higher risk of heart disease. Call a family member or friend today.", hi:"सामाजिक जुड़ाव दवाई है। अकेले रहने वालों में हृदय रोग का खतरा 29% ज्यादा होता है। आज किसी परिवार के सदस्य को फोन करें।"},
+  {cat:"mental", en:"Screen time before bed reduces sleep quality. Stop using phone 1 hour before sleeping. Read a book or listen to light music instead.", hi:"सोने से पहले स्क्रीन देखना नींद खराब करता है। सोने से 1 घंटे पहले फोन बंद करें। इसकी जगह किताब पढ़ें या हल्का संगीत सुनें।"},
+  {cat:"general", en:"Drink 8-10 glasses of water daily. Most Indians are chronically dehydrated. Even mild dehydration reduces brain function by 20%.", hi:"रोज 8-10 गिलास पानी पिएं। ज्यादातर भारतीय पुरानी निर्जलीकरण से पीड़ित हैं। हल्की निर्जलीकरण से भी मस्तिष्क की क्षमता 20% कम होती है।"},
+  {cat:"general", en:"Smoking a single cigarette reduces your life by 11 minutes. Quitting smoking adds 10 years to your life on average.", hi:"एक सिगरेट पीने से जीवन 11 मिनट कम होता है। धूम्रपान छोड़ने से औसतन 10 साल जीवन बढ़ता है।"},
+  {cat:"general", en:"Regular health checkups save lives. Get a full body checkup every year after age 30, every 6 months after age 45.", hi:"नियमित स्वास्थ्य जांच जीवन बचाती है। 30 साल के बाद हर साल, 45 के बाद हर 6 महीने में पूरी जांच करवाएं।"},
+  {cat:"general", en:"Jaggery (gur) is far healthier than white sugar. It contains iron, calcium and minerals. Use jaggery in sweets and tea.", hi:"गुड़ सफेद चीनी से बहुत ज्यादा स्वास्थ्यवर्धक है। इसमें आयरन, कैल्शियम और खनिज होते हैं। मिठाई और चाय में गुड़ इस्तेमाल करें।"},
+  {cat:"general", en:"Sitting for long hours increases heart disease risk even if you exercise. Stand up and walk for 5 minutes every hour.", hi:"लंबे समय तक बैठना दिल की बीमारी का खतरा बढ़ाता है चाहे आप व्यायाम करें। हर घंटे 5 मिनट खड़े हों और चलें।"},
+  {cat:"general", en:"Morning sunlight (7-9 AM) sets your body clock, improves mood, and provides Vitamin D. 20 minutes of morning sunlight daily is a superhabit.", hi:"सुबह की धूप (7-9 बजे) शरीर की घड़ी सेट करती है, मूड सुधारती है और विटामिन D देती है। रोज 20 मिनट सुबह धूप लेना एक महाआदत है।"}
+];
+
+var currentCat = "all";
+var currentSearch = "";
+
+function filterCat(cat, btn){
+  currentCat = cat;
+  document.querySelectorAll(".tfilter").forEach(function(b){ b.classList.remove("active"); });
+  btn.classList.add("active");
+  renderTips();
+}
+
+function filterTips(){
+  currentSearch = document.getElementById("searchBar").value.toLowerCase();
+  renderTips();
+}
+
+function getFiltered(){
+  return ALL_TIPS.filter(function(t){
+    var catMatch = currentCat==="all" || t.cat===currentCat;
+    var searchMatch = !currentSearch || t.en.toLowerCase().includes(currentSearch) || t.hi.includes(currentSearch);
+    return catMatch && searchMatch;
+  });
+}
+
+function renderTips(){
+  var tips = getFiltered();
+  document.getElementById("tipCount").textContent = tips.length + " tips found";
+  var grid = document.getElementById("tipsGrid");
+  grid.innerHTML = "";
+  tips.forEach(function(t, i){
+    var card = document.createElement("div");
+    card.className = "tip-card";
+    card.innerHTML =
+      "<span class='tip-cat-badge "+t.cat+"'>"+t.cat.charAt(0).toUpperCase()+t.cat.slice(1)+"</span>"+
+      "<div class='tip-en'>"+t.en+"</div>"+
+      "<div class='tip-hi'>"+t.hi+"</div>"+
+      "<div class='tip-actions'>"+
+        "<button class='tip-wa' onclick='shareTip("+i+")'>WhatsApp</button>"+
+        "<button class='tip-copy' onclick='copyTip("+i+")'>Copy</button>"+
+      "</div>";
+    grid.appendChild(card);
+  });
+}
+
+function shareTip(i){
+  var tips = getFiltered();
+  var t = tips[i];
+  var msg = "Health Tip from HealthGuard India:\n\n"+t.en+"\n\n"+t.hi+"\n\nCheck your health risk free: https://healthguardindia.com";
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+
+function copyTip(i){
+  var tips = getFiltered();
+  var t = tips[i];
+  var text = t.en+"\n\n"+t.hi+"\n\nHealthGuard India: https://healthguardindia.com";
+  navigator.clipboard.writeText(text).then(function(){ alert("Tip copied! Paste it anywhere."); });
+}
+
+function setTipOfDay(){
+  var dayIndex = new Date().getDay();
+  var t = ALL_TIPS[dayIndex % ALL_TIPS.length];
+  document.getElementById("todayEn").textContent = t.en;
+  document.getElementById("todayHi").textContent = t.hi;
+  window._todayTip = t;
+}
+
+function shareTipOfDay(){
+  var t = window._todayTip;
+  var msg = "Aaj ka Health Tip - HealthGuard India:\n\n"+t.en+"\n\n"+t.hi+"\n\nApna health check karo: https://healthguardindia.com";
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+
+function copyTipOfDay(){
+  var t = window._todayTip;
+  var text = "Health Tip of the Day:\n\n"+t.en+"\n\n"+t.hi;
+  navigator.clipboard.writeText(text).then(function(){ alert("Today's tip copied!"); });
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  setTipOfDay();
+  renderTips();
+});
+</script>
+</body>
+</html>

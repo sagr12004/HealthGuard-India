@@ -1,0 +1,513 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Family Health Tracker - HealthGuard India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+<style>
+.family-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:24px}
+.member-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:20px;box-shadow:var(--shadow);position:relative;transition:all 0.2s}
+.member-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.15)}
+.member-avatar{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;color:white;margin-bottom:12px}
+.member-name{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.member-relation{font-size:0.75rem;color:var(--text3);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.06em}
+.member-risk-bar{height:6px;background:var(--border2);border-radius:3px;margin-bottom:8px;overflow:hidden}
+.member-risk-fill{height:100%;border-radius:3px;transition:width 0.8s ease}
+.member-score{font-size:1.4rem;font-weight:800;margin-bottom:4px}
+.member-level{font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:8px;display:inline-block;margin-bottom:12px}
+.member-level.low{background:rgba(0,212,170,0.12);color:var(--low)}
+.member-level.moderate{background:rgba(255,165,0,0.12);color:var(--mod)}
+.member-level.high{background:rgba(255,68,102,0.12);color:var(--high)}
+.member-bmi{font-size:0.78rem;color:var(--text2);margin-bottom:12px}
+.member-actions{display:flex;gap:8px;flex-wrap:wrap}
+.member-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:var(--font);font-size:0.75rem;cursor:pointer;transition:all 0.2s}
+.member-btn:hover{border-color:var(--accent);color:var(--accent)}
+.member-btn.danger{color:#ff4466;border-color:rgba(255,68,102,0.3)}
+.member-btn.danger:hover{background:rgba(255,68,102,0.08)}
+.add-member-card{background:rgba(255,107,0,0.04);border:2px dashed rgba(255,107,0,0.3);border-radius:18px;padding:30px 20px;text-align:center;cursor:pointer;transition:all 0.2s}
+.add-member-card:hover{background:rgba(255,107,0,0.08);border-color:var(--accent)}
+.add-icon{width:48px;height:48px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:white;margin:0 auto 12px;font-weight:700}
+.add-text{font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.add-sub{font-size:0.78rem;color:var(--text3)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.modal-title{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.modal-sub{font-size:0.82rem;color:var(--text3);margin-bottom:20px}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text3);font-size:1.2rem;cursor:pointer;padding:4px 8px;border-radius:6px}
+.modal-close:hover{color:var(--text)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.combined-card{background:linear-gradient(135deg,rgba(255,107,0,0.08),rgba(255,165,0,0.04));border:1px solid rgba(255,107,0,0.2);border-radius:18px;padding:24px;margin-bottom:24px}
+.combined-title{font-size:0.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+.combined-score{font-size:2.4rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.combined-bar{height:10px;background:var(--border2);border-radius:5px;margin:12px 0;overflow:hidden}
+.combined-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--low),var(--mod),var(--high));transition:width 1s ease}
+.insight-box{background:var(--card2);border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:10px}
+.insight-label{font-size:0.7rem;font-weight:700;color:var(--text3);text-transform:uppercase;margin-bottom:5px}
+.insight-text{font-size:0.85rem;color:var(--text);line-height:1.6}
+.share-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.wa-btn{padding:10px 18px;background:#25D366;border:none;border-radius:10px;color:white;font-family:var(--font);font-size:0.84rem;font-weight:600;cursor:pointer}
+.copy-btn{padding:10px 14px;background:var(--card2);border:1px solid var(--border2);border-radius:10px;color:var(--text2);font-family:var(--font);font-size:0.82rem;cursor:pointer}
+.challenge-btn{padding:10px 18px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:10px;color:white;font-family:var(--font);font-size:0.84rem;font-weight:600;cursor:pointer}
+.report-card-btn{padding:10px 18px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;color:white;font-family:var(--font);font-size:0.84rem;font-weight:600;cursor:pointer}
+.empty-state{text-align:center;padding:60px 20px}
+.empty-icon{font-size:3rem;margin-bottom:16px;font-weight:800;color:var(--accent);opacity:0.4}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">HG</div>
+      <span class="nav-logo-text">Health<span>Guard</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="assess.html" class="nav-link">Check Health</a>
+      <a href="upload.html" class="nav-link">Upload Report</a>
+      <a href="diet.html" class="nav-link">Diet Plan</a>
+      <a href="family.html" class="nav-link active">Family</a>
+      <a href="tips.html" class="nav-link">Health Tips</a>
+      <a href="about.html" class="nav-link">About</a>
+    </div>
+    <div class="nav-controls">
+      <button class="lang-btn" id="langHi" onclick="setLang('hi')">Hindi</button>
+      <button class="lang-btn active" id="langEn" onclick="setLang('en')">English</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ADD MEMBER MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeModal()">X</button>
+    <div class="modal-title">Add Family Member</div>
+    <div class="modal-sub">Enter their health data to calculate risk</div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Full Name</label>
+      <input type="text" id="m-name" placeholder="e.g. Papa, Mummy, Dadi"/>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Relation</label>
+        <select id="m-relation">
+          <option value="Father">Father (Papa)</option>
+          <option value="Mother">Mother (Mummy)</option>
+          <option value="Brother">Brother (Bhai)</option>
+          <option value="Sister">Sister (Behen)</option>
+          <option value="Grandfather">Grandfather (Dada/Nana)</option>
+          <option value="Grandmother">Grandmother (Dadi/Nani)</option>
+          <option value="Spouse">Spouse</option>
+          <option value="Child">Child</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Age</label>
+        <input type="number" id="m-age" placeholder="Age" min="1" max="120"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Height (cm)</label>
+        <input type="number" id="m-height" placeholder="e.g. 165"/>
+      </div>
+      <div class="field">
+        <label>Weight (kg)</label>
+        <input type="number" id="m-weight" placeholder="e.g. 70"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>BP Systolic (mmHg)</label>
+        <input type="number" id="m-bp" placeholder="e.g. 120"/>
+      </div>
+      <div class="field">
+        <label>Blood Sugar Fasting</label>
+        <input type="number" id="m-glucose" placeholder="e.g. 95"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Family History of Diabetes?</label>
+        <select id="m-family">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Smoking?</label>
+        <select id="m-smoking">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:16px">
+      <label>Activity Level</label>
+      <select id="m-activity">
+        <option value="sedentary">Sedentary (No Exercise)</option>
+        <option value="light">Light</option>
+        <option value="moderate">Moderate</option>
+        <option value="active">Active</option>
+      </select>
+    </div>
+    <div id="modalError" class="error-msg" style="display:none">Please fill all required fields.</div>
+    <button class="submit-btn" onclick="saveMember()" style="margin-top:0">Calculate Risk and Add Member</button>
+  </div>
+</div>
+
+<div class="wrapper" style="padding-top:30px;padding-bottom:80px">
+  <div style="margin-bottom:24px">
+    <div class="section-label">Track Together</div>
+    <div class="section-title">Family Health Tracker</div>
+    <div class="section-sub">Add your parents, siblings and family members. See combined family health risk.</div>
+  </div>
+
+  <!-- COMBINED FAMILY RISK -->
+  <div id="combinedSection" style="display:none">
+    <div class="combined-card">
+      <div class="combined-title">Combined Family Risk Score</div>
+      <div class="combined-score" id="combinedScore">0%</div>
+      <div style="font-size:0.82rem;color:var(--text2);margin-bottom:8px" id="combinedLabel"></div>
+      <div class="combined-bar"><div class="combined-fill" id="combinedFill" style="width:0%"></div></div>
+      <div id="insightsList"></div>
+      <div class="share-row">
+        <button class="wa-btn" onclick="shareFamily()">Share on WhatsApp</button>
+        <button class="challenge-btn" onclick="challengeFriend()">Challenge a Friend</button>
+        <button class="report-card-btn" onclick="downloadReportCard()">Download Report Card</button>
+        <button class="copy-btn" onclick="copyFamilyLink()">Copy Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAMILY MEMBERS GRID -->
+  <div class="family-grid" id="familyGrid">
+    <div class="add-member-card" onclick="openModal()">
+      <div class="add-icon">+</div>
+      <div class="add-text">Add Family Member</div>
+      <div class="add-sub">Papa, Mummy, Bhai, Behen...</div>
+    </div>
+  </div>
+
+  <div id="emptyState" class="empty-state">
+    <div class="empty-icon">HG</div>
+    <div style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:8px">No family members added yet</div>
+    <div style="font-size:0.84rem;color:var(--text3);margin-bottom:20px">Add your parents and family to see combined health risk</div>
+    <button class="btn-primary" onclick="openModal()">Add First Member</button>
+  </div>
+</div>
+
+<!-- REPORT CARD CANVAS (hidden) -->
+<canvas id="reportCanvas" style="display:none"></canvas>
+
+<footer>
+  <div class="wrapper">
+    <div class="footer-brand">HealthGuard India</div>
+    <strong>Made by Sagar</strong> &middot; Not a medical device
+  </div>
+</footer>
+
+<script src="js/lang.js"></script>
+<script src="js/theme.js"></script>
+<script>
+var members = JSON.parse(localStorage.getItem("hg_family") || "[]");
+var COLORS = ["#ff6b00","#6366f1","#00d4aa","#f43f5e","#a855f7","#0ea5e9","#ffa500"];
+var RELATIONS = {Father:"F",Mother:"M",Brother:"B",Sister:"S",Grandfather:"G",Grandmother:"N",Spouse:"SP",Child:"C",Other:"O"};
+
+function openModal(){ document.getElementById("modalOverlay").classList.add("show"); }
+function closeModal(){
+  document.getElementById("modalOverlay").classList.remove("show");
+  ["m-name","m-age","m-height","m-weight","m-bp","m-glucose"].forEach(function(id){ document.getElementById(id).value=""; });
+  document.getElementById("modalError").style.display="none";
+}
+
+async function saveMember(){
+  var name     = document.getElementById("m-name").value.trim();
+  var relation = document.getElementById("m-relation").value;
+  var age      = document.getElementById("m-age").value;
+  var height   = document.getElementById("m-height").value;
+  var weight   = document.getElementById("m-weight").value;
+  var bp       = document.getElementById("m-bp").value;
+  var glucose  = document.getElementById("m-glucose").value;
+  var family   = document.getElementById("m-family").value;
+  var smoking  = document.getElementById("m-smoking").value;
+  var activity = document.getElementById("m-activity").value;
+  var errEl    = document.getElementById("modalError");
+
+  if(!name||!age||!height||!weight||!bp||!glucose){
+    errEl.style.display="block"; return;
+  }
+  errEl.style.display="none";
+
+  // Calculate BMI locally
+  var h = parseFloat(height)/100;
+  var bmi = (parseFloat(weight)/(h*h)).toFixed(1);
+
+  // Calculate risk score locally (same logic as backend)
+  var score = 0;
+  var a = parseInt(age);
+  var b = parseFloat(bp);
+  var g = parseFloat(glucose);
+  var bmiVal = parseFloat(bmi);
+
+  if(a>45) score+=2;
+  if(b>=140) score+=3; else if(b>=130) score+=2; else if(b>=120) score+=1;
+  if(g>=126) score+=4; else if(g>=100) score+=2; else if(g>=90) score+=1;
+  if(bmiVal>=30) score+=3; else if(bmiVal>=25) score+=2; else if(bmiVal<18.5) score+=1;
+  if(family==="yes") score+=2;
+  if(smoking==="yes") score+=2;
+  if(activity==="sedentary") score+=2; else if(activity==="light") score+=1;
+
+  var riskPct = Math.round((score/18)*100);
+  var riskLevel = riskPct<=30?"Low":riskPct<=60?"Moderate":"High";
+
+  var member = {
+    id: Date.now(),
+    name: name, relation: relation, age: age,
+    height: height, weight: weight, bp: bp, glucose: glucose,
+    bmi: bmi, riskPercentage: riskPct, riskLevel: riskLevel,
+    color: COLORS[members.length % COLORS.length]
+  };
+  members.push(member);
+  localStorage.setItem("hg_family", JSON.stringify(members));
+  closeModal();
+  renderFamily();
+}
+
+function deleteMember(id){
+  members = members.filter(function(m){ return m.id !== id; });
+  localStorage.setItem("hg_family", JSON.stringify(members));
+  renderFamily();
+}
+
+function renderFamily(){
+  var grid = document.getElementById("familyGrid");
+  var empty = document.getElementById("emptyState");
+  var combined = document.getElementById("combinedSection");
+
+  empty.style.display = members.length ? "none" : "block";
+  combined.style.display = members.length ? "block" : "none";
+
+  grid.innerHTML = "";
+  // Add member card first
+  var addCard = document.createElement("div");
+  addCard.className = "add-member-card";
+  addCard.onclick = openModal;
+  addCard.innerHTML = "<div class='add-icon'>+</div><div class='add-text'>Add Family Member</div><div class='add-sub'>Papa, Mummy, Bhai, Behen...</div>";
+  grid.appendChild(addCard);
+
+  members.forEach(function(m){
+    var card = document.createElement("div");
+    card.className = "member-card";
+    var initials = m.name.split(" ").map(function(w){return w[0];}).join("").toUpperCase().slice(0,2);
+    var riskColor = m.riskLevel==="Low"?"var(--low)":m.riskLevel==="Moderate"?"var(--mod)":"var(--high)";
+    card.innerHTML =
+      "<div class='member-avatar' style='background:"+m.color+"'>"+initials+"</div>"+
+      "<div class='member-name'>"+m.name+"</div>"+
+      "<div class='member-relation'>"+m.relation+" &middot; Age "+m.age+"</div>"+
+      "<div class='member-score' style='color:"+riskColor+"'>"+m.riskPercentage+"%</div>"+
+      "<span class='member-level "+m.riskLevel.toLowerCase()+"'>"+m.riskLevel+" Risk</span>"+
+      "<div class='member-risk-bar'><div class='member-risk-fill' style='width:"+m.riskPercentage+"%;background:"+riskColor+"'></div></div>"+
+      "<div class='member-bmi'>BMI: "+m.bmi+" &middot; BP: "+m.bp+" &middot; Sugar: "+m.glucose+"</div>"+
+      "<div class='member-actions'>"+
+        "<button class='member-btn' onclick='shareOneMember("+m.id+")'>Share</button>"+
+        "<button class='member-btn' onclick='challengeWithMember("+m.id+")'>Challenge Friend</button>"+
+        "<button class='member-btn danger' onclick='deleteMember("+m.id+")'>Remove</button>"+
+      "</div>";
+    grid.appendChild(card);
+  });
+
+  updateCombined();
+}
+
+function updateCombined(){
+  if(!members.length) return;
+  var avg = Math.round(members.reduce(function(s,m){return s+m.riskPercentage;},0)/members.length);
+  var highRisk = members.filter(function(m){return m.riskLevel==="High";});
+  var modRisk  = members.filter(function(m){return m.riskLevel==="Moderate";});
+
+  document.getElementById("combinedScore").textContent = avg + "%";
+  document.getElementById("combinedFill").style.width = avg + "%";
+  var label = avg<=30?"Your family is in good health overall!":avg<=60?"Some members need attention. Check recommendations.":"High risk family. Please consult a doctor for multiple members.";
+  document.getElementById("combinedLabel").textContent = label;
+
+  var insights = "";
+  if(highRisk.length){
+    insights += "<div class='insight-box'><div class='insight-label'>Urgent Attention Needed</div><div class='insight-text'>"+highRisk.map(function(m){return m.name;}).join(", ")+" ha"+(highRisk.length>1?"ve":"s")+" High Risk. Please consult a doctor soon.</div></div>";
+  }
+  if(modRisk.length){
+    insights += "<div class='insight-box'><div class='insight-label'>Moderate Risk Members</div><div class='insight-text'>"+modRisk.map(function(m){return m.name;}).join(", ")+" should improve diet and exercise habits.</div></div>";
+  }
+  var oldest = members.reduce(function(a,b){return parseInt(a.age)>parseInt(b.age)?a:b;});
+  if(parseInt(oldest.age)>50){
+    insights += "<div class='insight-box'><div class='insight-label'>Senior Health Tip</div><div class='insight-text'>"+oldest.name+" ("+oldest.age+" yrs) should get a full body checkup every 6 months.</div></div>";
+  }
+  if(!insights) insights = "<div class='insight-box'><div class='insight-label'>Family Status</div><div class='insight-text'>All family members are in low risk zone. Keep it up!</div></div>";
+  document.getElementById("insightsList").innerHTML = insights;
+}
+
+// ── SHARE FUNCTIONS ────────────────────────────────────────────────
+function shareFamily(){
+  var avg = members.length ? Math.round(members.reduce(function(s,m){return s+m.riskPercentage;},0)/members.length) : 0;
+  var memberStr = members.map(function(m){return m.name+"("+m.riskPercentage+"%)";}).join(", ");
+  var msg = "My family health check on HealthGuard India!\n\nFamily Members: "+memberStr+"\nAverage Family Risk: "+avg+"%\n\nCheck your family health for free: https://healthguardindia.com";
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+
+function shareOneMember(id){
+  var m = members.find(function(x){return x.id===id;});
+  if(!m) return;
+  var msg = m.name+" ka health check HealthGuard India par!\n\nRisk Score: "+m.riskPercentage+"% ("+m.riskLevel+" Risk)\nBMI: "+m.bmi+"\n\nApna health check karo - bilkul free: https://healthguardindia.com";
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+
+function challengeFriend(){
+  var myScore = sessionStorage.getItem("hg_last_score") || "?";
+  var msg = "Mera HealthGuard India pe health risk score: "+myScore+"%!\n\nKya tumhara score mere se kam hai? Check karo:\nhttps://healthguardindia.com\n\nFree health risk calculator - made for India!";
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+
+function challengeWithMember(id){
+  var m = members.find(function(x){return x.id===id;});
+  if(!m) return;
+  var msg = m.name+" ka health risk score: "+m.riskPercentage+"% hai HealthGuard India pe!\nKya tumhara score isse kam hai?\n\nCheck karo: https://healthguardindia.com\nFree health check - made for India!";
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+
+function copyFamilyLink(){
+  var text = "Check your family health for free on HealthGuard India! Add all family members and see combined risk. https://healthguardindia.com";
+  navigator.clipboard.writeText(text).then(function(){ alert("Link copied! Share with your family."); });
+}
+
+// ── REPORT CARD DOWNLOAD ───────────────────────────────────────────
+function downloadReportCard(){
+  var canvas  = document.getElementById("reportCanvas");
+  var ctx     = canvas.getContext("2d");
+  canvas.width  = 800;
+  canvas.height = 500 + members.length * 70;
+
+  // Background
+  ctx.fillStyle = "#0f0f23";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // Header gradient bar
+  var grad = ctx.createLinearGradient(0,0,canvas.width,0);
+  grad.addColorStop(0,"#ff6b00");
+  grad.addColorStop(1,"#ffa500");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,canvas.width,8);
+
+  // Logo and title
+  ctx.fillStyle="#ff6b00";
+  ctx.fillRect(40,30,44,44);
+  ctx.fillStyle="white";
+  ctx.font="bold 16px Arial";
+  ctx.fillText("HG",52,58);
+  ctx.fillStyle="white";
+  ctx.font="bold 22px Arial";
+  ctx.fillText("HealthGuard India",96,58);
+  ctx.fillStyle="rgba(255,255,255,0.4)";
+  ctx.font="12px Arial";
+  ctx.fillText("Family Health Report Card",96,76);
+
+  // Date
+  ctx.fillStyle="rgba(255,255,255,0.3)";
+  ctx.font="11px Arial";
+  ctx.textAlign="right";
+  ctx.fillText(new Date().toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"}),canvas.width-40,55);
+  ctx.textAlign="left";
+
+  // Combined score
+  if(members.length){
+    var avg = Math.round(members.reduce(function(s,m){return s+m.riskPercentage;},0)/members.length);
+    ctx.fillStyle="rgba(255,255,255,0.06)";
+    roundRect(ctx,40,100,canvas.width-80,110,16);
+    ctx.fill();
+    ctx.fillStyle="rgba(255,107,0,0.6)";
+    ctx.font="bold 11px Arial";
+    ctx.fillText("FAMILY AVERAGE RISK",60,130);
+    ctx.fillStyle = avg<=30?"#00d4aa":avg<=60?"#ffa500":"#ff4466";
+    ctx.font="bold 48px Arial";
+    ctx.fillText(avg+"%",60,180);
+    ctx.fillStyle="rgba(255,255,255,0.5)";
+    ctx.font="13px Arial";
+    ctx.fillText(avg<=30?"Low Risk - Family is healthy!":avg<=60?"Moderate Risk - Attention needed":"High Risk - See a doctor soon",200,165);
+    ctx.fillText(members.length+" family member"+(members.length>1?"s":"")+" tracked",200,185);
+  }
+
+  // Members
+  var yStart = 230;
+  members.forEach(function(m,i){
+    var y = yStart + i*70;
+    ctx.fillStyle="rgba(255,255,255,0.04)";
+    roundRect(ctx,40,y,canvas.width-80,58,12);
+    ctx.fill();
+
+    // Avatar circle
+    ctx.fillStyle=m.color;
+    ctx.beginPath(); ctx.arc(80,y+29,20,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle="white";
+    ctx.font="bold 13px Arial";
+    ctx.textAlign="center";
+    var ini=m.name.split(" ").map(function(w){return w[0];}).join("").toUpperCase().slice(0,2);
+    ctx.fillText(ini,80,y+34);
+    ctx.textAlign="left";
+
+    ctx.fillStyle="white";
+    ctx.font="bold 14px Arial";
+    ctx.fillText(m.name,112,y+24);
+    ctx.fillStyle="rgba(255,255,255,0.4)";
+    ctx.font="11px Arial";
+    ctx.fillText(m.relation+" | Age "+m.age+" | BMI "+m.bmi,112,y+42);
+
+    var rc=m.riskLevel==="Low"?"#00d4aa":m.riskLevel==="Moderate"?"#ffa500":"#ff4466";
+    ctx.fillStyle=rc;
+    ctx.font="bold 20px Arial";
+    ctx.textAlign="right";
+    ctx.fillText(m.riskPercentage+"%",canvas.width-60,y+24);
+    ctx.font="11px Arial";
+    ctx.fillText(m.riskLevel+" Risk",canvas.width-60,y+42);
+    ctx.textAlign="left";
+  });
+
+  // Footer
+  var fy = canvas.height - 50;
+  ctx.fillStyle="rgba(255,255,255,0.15)";
+  ctx.fillRect(0,fy,canvas.width,1);
+  ctx.fillStyle="rgba(255,255,255,0.3)";
+  ctx.font="11px Arial";
+  ctx.textAlign="center";
+  ctx.fillText("HealthGuard India | Made by Sagar | Not a medical device | For awareness only",canvas.width/2,fy+22);
+  ctx.fillText("healthguardindia.com",canvas.width/2,fy+38);
+
+  // Download
+  var link=document.createElement("a");
+  link.download="HealthGuard_Family_Report.png";
+  link.href=canvas.toDataURL("image/png");
+  link.click();
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+document.addEventListener("DOMContentLoaded", renderFamily);
+</script>
+</body>
+</html>
