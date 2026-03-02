@@ -125,5 +125,47 @@ function copySiteLink(){
   navigator.clipboard.writeText("HealthGuard India - Free health check for Indians: https://healthguardindia.com").then(function(){ alert("Link copied!"); });
 }
 </script>
+<script>
+function toggleDrawer(){
+  var drawer = document.getElementById("mobileDrawer");
+  var btn = document.getElementById("hamburgerBtn");
+  if(!drawer || !btn) return;
+  var isOpen = drawer.classList.contains("open");
+  if(isOpen){
+    drawer.classList.remove("open");
+    btn.classList.remove("open");
+    document.body.style.overflow = "";
+  } else {
+    drawer.classList.add("open");
+    btn.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+}
+function closeDrawer(){
+  var drawer = document.getElementById("mobileDrawer");
+  var btn = document.getElementById("hamburgerBtn");
+  if(drawer) drawer.classList.remove("open");
+  if(btn) btn.classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.addEventListener("DOMContentLoaded", function(){
+  // Highlight active mobile link
+  document.querySelectorAll(".mobile-nav-link").forEach(function(link){
+    var href = link.getAttribute("href");
+    if(href && window.location.pathname.indexOf(href) !== -1){
+      link.classList.add("active");
+    }
+  });
+  // Close on outside click
+  document.addEventListener("click", function(e){
+    var drawer = document.getElementById("mobileDrawer");
+    var btn = document.getElementById("hamburgerBtn");
+    if(!drawer || !btn) return;
+    if(drawer.classList.contains("open") && !drawer.contains(e.target) && !btn.contains(e.target)){
+      closeDrawer();
+    }
+  });
+});
+</script>
 </body>
 </html>
