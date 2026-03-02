@@ -25,6 +25,7 @@
       <a href="tips.html" class="nav-link" data-lang="nav_tips"></a>
       <a href="about.html" class="nav-link" data-lang="nav_about"></a>
     </div>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleDrawer()" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="nav-controls">
       <button class="lang-btn" id="langHi" onclick="setLang('hi')">Hindi</button>
       <button class="lang-btn active" id="langEn" onclick="setLang('en')">English</button>
@@ -32,6 +33,22 @@
     </div>
   </div>
 </nav>
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="index.html" class="mobile-nav-link" data-lang="nav_home"></a>
+  <a href="assess.html" class="mobile-nav-link" data-lang="nav_check"></a>
+  <a href="upload.html" class="mobile-nav-link" data-lang="nav_upload"></a>
+  <a href="diet.html" class="mobile-nav-link" data-lang="nav_diet"></a>
+  <a href="family.html" class="mobile-nav-link" data-lang="nav_family"></a>
+  <a href="tips.html" class="mobile-nav-link" data-lang="nav_tips"></a>
+  <a href="about.html" class="mobile-nav-link" data-lang="nav_about"></a>
+  <div class="mobile-drawer-divider"></div>
+  <div class="mobile-controls">
+    <button class="lang-btn" onclick="setLang('hi');closeDrawer()">Hindi</button>
+    <button class="lang-btn" onclick="setLang('en');closeDrawer()">English</button>
+    <button class="theme-btn" onclick="toggleTheme();closeDrawer()">Toggle Theme</button>
+  </div>
+</div>
 <div class="wrapper">
   <section class="hero">
     <div class="hero-badge" data-lang="hero_badge"></div>
