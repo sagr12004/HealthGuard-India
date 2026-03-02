@@ -1,4 +1,4 @@
-(IF CHECKING IN MOBILE PHONE ,PLEASE DO VIEW AS DESKTOP VIEW)
+**(IF CHECKING IN MOBILE PHONE ,PLEASE DO VIEW AS DESKTOP VIEW)**
 # HealthGuard India 🏥
 
 > **Free preventive health platform built for 1.4 billion Indians**  
