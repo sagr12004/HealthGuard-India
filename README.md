@@ -1,4 +1,3 @@
-
 # HealthGuard India 🏥
 
 > **Free preventive health platform built for 1.4 billion Indians**  
@@ -6,13 +5,12 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-healthguard--india.netlify.app-FF6B00?style=for-the-badge)](https://healthguard-india.netlify.app)
 [![Backend API](https://img.shields.io/badge/⚡_API-healthguard--india.onrender.com-6366F1?style=for-the-badge)](https://healthguard-india.onrender.com/api/health)
 [![GitHub](https://img.shields.io/badge/GitHub-sagr12004%2FHealthGuard--India-181717?style=for-the-badge&logo=github)](https://github.com/sagr12004/HealthGuard-India)
 
 ![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?logo=nodedotjs)
 ![Express](https://img.shields.io/badge/Express-4.18-000000?logo=express)
-![Netlify](https://img.shields.io/badge/Deployed-Netlify-00C7B7?logo=netlify)
+![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?logo=vercel)
 ![Render](https://img.shields.io/badge/Backend-Render-46E3B7?logo=render)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
@@ -118,7 +116,7 @@
 ### Deployment
 | Service | Purpose |
 |---------|---------|
-| **Netlify** | Frontend hosting (free) |
+| **Vercel** | Frontend hosting (free) |
 | **Render** | Backend API hosting (free) |
 | **GitHub** | Version control |
 
@@ -126,7 +124,6 @@
 
 ## 🚀 Live Demo
 
-🌐 **Website:** [https://healthguard-india.netlify.app](https://healthguard-india.netlify.app)  
 ⚡ **API Health:** [https://healthguard-india.onrender.com/api/health](https://healthguard-india.onrender.com/api/health)
 
 > **Note:** Backend is on Render free tier — first request may take 30–50 seconds to wake up (cold start). Subsequent requests are fast.
@@ -134,26 +131,18 @@
 ---
 
 ## 📁 Project Structure
-
 ```
 HealthGuard/
 ├── backend/
 │   ├── controllers/
-│   │   ├── riskController.js       # Risk scoring engine
-│   │   ├── nutritionController.js  # USDA FoodData integration
-│   │   ├── drugController.js       # openFDA integration
-│   │   ├── symptomController.js    # Infermedica integration
-│   │   ├── providerController.js   # Hospital lookup (NPPES)
-│   │   ├── diseaseController.js    # Disease stats
-│   │   └── insuranceController.js  # Insurance data
+│   │   ├── riskController.js
+│   │   ├── nutritionController.js
+│   │   ├── drugController.js
+│   │   ├── symptomController.js
+│   │   ├── providerController.js
+│   │   ├── diseaseController.js
+│   │   └── insuranceController.js
 │   ├── routes/
-│   │   ├── risk.js
-│   │   ├── nutrition.js
-│   │   ├── drug.js
-│   │   ├── symptom.js
-│   │   ├── provider.js
-│   │   ├── disease.js
-│   │   └── insurance.js
 │   ├── utils/
 │   ├── .env.example
 │   ├── package.json
@@ -161,24 +150,25 @@ HealthGuard/
 │
 ├── frontend/
 │   ├── css/
-│   │   └── styles.css              # Complete design system
+│   │   └── styles.css
 │   ├── js/
-│   │   ├── lang.js                 # Bilingual translations (EN/HI)
-│   │   ├── theme.js                # Theme + language system
-│   │   ├── api.js                  # All backend API calls
-│   │   ├── main.js                 # Health check form logic
-│   │   ├── results.js              # Results rendering
-│   │   ├── chart.js                # Radar chart
-│   │   └── upload.js               # Blood report parser
-│   ├── index.html                  # Home page
-│   ├── assess.html                 # Health check form
-│   ├── results.html                # Results + Health Score
-│   ├── upload.html                 # Blood report upload
-│   ├── diet.html                   # 7-day diet plans
-│   ├── family.html                 # Family health tracker
-│   ├── tips.html                   # Health tips
-│   └── about.html                  # About page
+│   │   ├── lang.js
+│   │   ├── theme.js
+│   │   ├── api.js
+│   │   ├── main.js
+│   │   ├── results.js
+│   │   ├── chart.js
+│   │   └── upload.js
+│   ├── index.html
+│   ├── assess.html
+│   ├── results.html
+│   ├── upload.html
+│   ├── diet.html
+│   ├── family.html
+│   ├── tips.html
+│   └── about.html
 │
+├── vercel.json
 ├── .gitignore
 ├── package.json
 └── README.md
@@ -243,30 +233,31 @@ Open `frontend/index.html` in browser, or use Live Server in VS Code.
 1. Go to [render.com](https://render.com) → **New Web Service**
 2. Connect GitHub repo: `sagr12004/HealthGuard-India`
 3. Settings:
-   ```
+```
    Root Directory:  backend
    Build Command:   npm install
    Start Command:   node server.js
    Region:          Singapore
-   ```
+```
 4. Add Environment Variables (from your `.env`)
 5. Deploy → get URL like `https://healthguard-india.onrender.com`
 
-### Frontend → Netlify (Free)
+### Frontend → Vercel (Free)
 
-**Option A — Drag & Drop:**
-1. Go to [app.netlify.com](https://app.netlify.com)
-2. Drag the `frontend/` folder into deploy zone
-3. Set site name to `healthguard-india`
-
-**Option B — GitHub CI/CD:**
-1. New site → Import from Git
-2. Set **Publish directory:** `frontend`
-3. Auto-deploys on every `git push`
+1. Go to [vercel.com](https://vercel.com) → **New Project**
+2. Import GitHub repo: `sagr12004/HealthGuard-India`
+3. Settings:
+```
+   Framework Preset:  Other
+   Root Directory:    frontend
+   Build Command:     (leave empty)
+   Output Directory:  .
+```
+4. Deploy → done!
 
 ### Update API URL after deployment
-```bash
-# In frontend/js/api.js
+```js
+// In frontend/js/api.js
 var API_BASE = "https://healthguard-india.onrender.com/api";
 ```
 
@@ -285,63 +276,13 @@ var API_BASE = "https://healthguard-india.onrender.com/api";
 | GET | `/api/provider?city=&specialty=` | Find nearby hospitals |
 | GET | `/api/disease?name=` | Get disease statistics |
 
-### Sample Risk API Request
-```json
-POST /api/risk
-{
-  "age": 35,
-  "height": 170,
-  "weight": 80,
-  "bp": 130,
-  "glucose": 105,
-  "familyHistory": "yes",
-  "smoking": "no",
-  "activity": "sedentary"
-}
-```
-
-### Sample Risk API Response
-```json
-{
-  "data": {
-    "riskScore": 9,
-    "riskPercentage": 50,
-    "riskLevel": "Moderate",
-    "bmi": 27.7,
-    "bmiCategory": "Overweight",
-    "explanation": "Moderate risk due to BP and BMI.",
-    "factors": [
-      { "factor": "Blood Pressure", "isRisk": true },
-      { "factor": "BMI", "isRisk": true }
-    ],
-    "recommendations": [
-      { "icon": "🥗", "text": "Reduce salt intake", "priority": "high" }
-    ]
-  }
-}
-```
-
 ---
 
 ## 🤝 Contributing
-
-Contributions are welcome! Here's how:
-
 ```bash
-# Fork the repo
 git clone https://github.com/YOUR_USERNAME/HealthGuard-India.git
-
-# Create a feature branch
 git checkout -b feature/your-feature-name
-
-# Make your changes
-# ...
-
-# Commit
-git add .
 git commit -m "Add: your feature description"
-
-# Push and create Pull Request
 git push origin feature/your-feature-name
 ```
 
@@ -395,12 +336,11 @@ MIT License — feel free to use, modify and distribute.
 <div align="center">
 
 **Sagar**  
-Built with passion to improve health awareness in India 🇮🇳  
-Using technology to make healthcare more accessible for everyone.
-
-⭐ **Star this repo if you found it useful!** ⭐
+Built with passion to improve health awareness in India 🇮🇳
 
 [![GitHub](https://img.shields.io/badge/GitHub-sagr12004-181717?logo=github&style=flat-square)](https://github.com/sagr12004)
+
+⭐ **Star this repo if you found it useful!** ⭐
 
 </div>
 
